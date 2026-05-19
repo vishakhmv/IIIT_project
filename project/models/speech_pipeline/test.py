@@ -7,8 +7,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from torch.utils.data import DataLoader
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.manifold import TSNE
 # Import the architecture and dataset loader directly from our train script
 from train import SpeechEmotionModel, TESSSpeechDataset
+
+
+def save_tsne_plot(features, labels, title, save_path):
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    tsne = TSNE(n_components=2, perplexity=30, random_state=42)
+    tsne_results = tsne.fit_transform(features)
+    
+    plt.figure(figsize=(10, 8))
+    # 'hue' uses the text labels to create a beautiful, named legend
+    sns.scatterplot(x=tsne_results[:, 0], y=tsne_results[:, 1], hue=labels, palette="deep")
+    plt.title(title)
+    plt.savefig(save_path)
+    plt.close()
 
 def test_pipeline():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -23,6 +37,7 @@ def test_pipeline():
     
     csv_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/speech_accuracy_table.csv'))
     matrix_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/plots/Speech_model/confusion_matrix.png'))
+    tsne_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/plots/Speech_model/tsne.png'))
     
     # Pre-flight structural sanity check for audio dir
     if not os.path.exists(base_audio_dir):
@@ -46,6 +61,7 @@ def test_pipeline():
     
     all_preds = []
     all_targets = []
+    all_features = []
     
     print("Evaluating test set... (Extracting acoustic features and running inference)")
     with torch.no_grad():
@@ -53,13 +69,28 @@ def test_pipeline():
             raw_audio = batch['raw_audio'].to(device)
             mfcc = batch['mfcc'].to(device)
             targets = batch['targets'].to(device)
-            
-            outputs = model(raw_audio, mfcc)
+    
+            hubert_out = model.hubert(raw_audio).last_hidden_state
+            target_time = min(hubert_out.size(1), mfcc.size(1))
+            combined = torch.cat((hubert_out[:, :target_time, :], mfcc[:, :target_time, :]), dim=-1)
+            lstm_out, _ = model.speech_temporal(combined)
+            features = torch.mean(lstm_out, dim=1) 
+            outputs = model.classifier(features)
+            all_features.append(features.cpu())
             all_preds.extend(outputs.argmax(dim=1).cpu().numpy())
             all_targets.extend(targets.cpu().numpy())
             
     # Fixed alphabetical dictionary mapping
     target_names = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'pleasant surprise', 'sad']
+
+    print("Generating t-SNE visualization...")
+    
+    all_features_numpy = torch.cat(all_features, dim=0).numpy()
+    
+    named_labels = [target_names[label] for label in all_targets]
+    
+    save_tsne_plot(all_features_numpy, named_labels, "t-SNE Latent Space: Speech BiLSTM", tsne_out_path)
+    print(f"[SUCCESS] Speech t-SNE plot successfully saved to: {tsne_out_path}")
     
     # Calculate evaluation metrics and save as .csv
     report_dict = classification_report(all_targets, all_preds, target_names=target_names, output_dict=True, zero_division=0)
