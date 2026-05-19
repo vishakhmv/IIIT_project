@@ -62,6 +62,10 @@ The dataset is divided using an **80% Training / 20% Testing** split while maint
 
 The TESS dataset was extracted and processed using custom preprocessing scripts developed in Google Colab.
 
+<p align="center">
+  <img src="assets/tess-data-flow.png" width="85%">
+</p>
+
 ---
 
 ### 🔓 Data Extraction
@@ -221,3 +225,189 @@ The final preprocessing pipeline produced a clean and reproducible multimodal da
 - Speech Emotion Recognition
 - Text Emotion Recognition
 - Multimodal Fusion Training
+
+
+## 🧠 Models
+
+This project consists of three independent deep learning pipelines:
+
+### 🎙️ 1. Speech-Only Model
+
+The Speech-Only pipeline predicts emotions directly from raw audio signals by learning acoustic speech features such as tone, pitch, energy, etc.
+
+### 🏋️ a. Training Pipeline
+
+The Speech-Only training pipeline predicts emotions directly from raw audio signals using a hybrid deep learning architecture that combines pretrained speech representations, handcrafted acoustic features, and temporal sequence modeling.
+
+---
+
+### 🧠 Model Architecture
+
+The training architecture integrates:
+
+- **HuBERT** for contextual speech representation learning
+- **MFCC Features** for acoustic feature extraction
+- **BiLSTM Layers** for temporal emotional pattern modeling
+- **Fully Connected Classification Head** for final emotion prediction
+
+---
+
+### 🔊 Audio Preprocessing
+
+Each audio sample undergoes multiple preprocessing stages before training:
+
+- Audio loading using `librosa`
+- Silence trimming
+- Fixed-length padding/truncation
+- MFCC feature extraction
+- Raw waveform preparation for HuBERT
+
+All audio samples are standardized to a fixed duration for consistent batch training.
+
+---
+
+### 🎼 Feature Extraction
+
+The model extracts two complementary speech representations from every audio sample.
+
+### 1. HuBERT Embeddings
+
+A pretrained **HuBERT (`facebook/hubert-base-ls960`)** model generates contextual speech embeddings directly from raw audio waveforms.
+
+These embeddings capture:
+
+- Speech context
+- Prosody
+- Temporal speech structure
+- High-level acoustic patterns
+
+The pretrained HuBERT weights are frozen during training to preserve learned speech representations.
+
+---
+
+### 2. MFCC Acoustic Features
+
+MFCC features are extracted using `librosa` to capture low-level acoustic characteristics such as:
+
+- Pitch
+- Tone
+- Frequency distribution
+- Spectral variations
+
+The MFCC features are then combined with HuBERT embeddings to create a richer emotional speech representation.
+
+---
+
+### 🔗 Feature Fusion
+
+The extracted HuBERT embeddings and MFCC features are concatenated along the feature dimension to form a unified acoustic representation.
+
+This fusion allows the model to learn from both:
+
+- Deep contextual speech embeddings
+- Traditional handcrafted acoustic features
+
+simultaneously.
+
+---
+
+### ⏳ Temporal Sequence Modeling
+
+The fused speech representation is passed through a **Bidirectional LSTM (BiLSTM)** network.
+
+The BiLSTM learns temporal emotional dependencies across speech frames by modeling:
+
+- Emotional transitions
+- Speaking rhythm
+- Sequential acoustic dynamics
+- Prosodic variations over time
+
+Global temporal pooling is applied after the BiLSTM to generate a compact emotional embedding.
+
+---
+
+### 🎯 Emotion Classification
+
+The pooled emotional embedding is passed through a fully connected classification head consisting of:
+
+- Linear Layers
+- Layer Normalization
+- ReLU Activation
+- Dropout Regularization
+
+The classifier predicts one of the seven emotional categories.
+
+---
+
+### 📊 Dataset Loading
+
+Training samples are loaded directly from:
+
+```bash
+Data_split/train_split.csv
+```
+
+The CSV file contains:
+
+| Column | Description |
+|---|---|
+| path | Relative audio file path |
+| text | Generated transcript |
+| label_encoded | Numerical emotion label |
+
+The training dataset is further divided into:
+
+- Training Set
+- Validation Set
+
+to monitor generalization performance during learning.
+
+---
+
+### ⚙️ Optimization Strategy
+
+The training pipeline uses:
+
+- **AdamW Optimizer**
+- **CrossEntropy Loss**
+- **Dropout Regularization**
+- **Validation-based Checkpoint Saving**
+
+The best-performing model weights are automatically saved during training.
+
+---
+
+### 📈 Training Monitoring
+
+During training, the pipeline tracks:
+
+- Training Loss
+- Validation Loss
+- Training Accuracy
+- Validation Accuracy
+
+Learning curves are generated for performance visualization and convergence analysis.
+
+### 💾 Generated Outputs
+
+```bash
+Results/
+└── plots/
+    └── Speech_model/
+        └── learning_curves.png
+```
+
+The best-performing model weights obtained during validation are automatically saved as:
+
+```bash
+best_speech_model.pth
+```
+
+This file stores the learned parameters of the Speech-Only deep learning model and is later loaded during the testing and evaluation phase for inference on unseen samples.
+
+### 💾 Storage Location
+
+```bash
+IIIT_project/
+└── best_speech_model.pth
+```
