@@ -1,0 +1,16 @@
+# Block heavy datasets and compressed archives
+TESS_dataset/
+archive.zip
+
+# Block heavy binary model weights
+*.pth
+
+# Block Python system artifacts
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Block local configuration environments
+venv/
+env/
+.env
