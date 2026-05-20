@@ -596,18 +596,19 @@ Generated output:
 
 ```bash
 IIIT_project/
-└── Speech_only/
-    └── Results/
-        └── plots/
-            └── Speech_model/
-                └── learning_curves.png
+└── Results/
+    └── plots/
+        └── Speech_model/
+            └── learning_curves.png
 ```
 
-The generated plots visualize training dynamics, convergence behavior, and validation performance across epochs.
+The generated plots visualize training convergence, validation stability, and overall learning behavior across training epochs.
 
 <p align="center">
-  <img src="assets/speech-learning-curves.png" width="80%">
+  <img src="assets/speech-learning-curve.png" width="80%">
 </p>
+
+The learning curves show rapid convergence with consistently low validation loss and high validation accuracy, indicating stable training and strong generalization performance on unseen validation samples.
 
 ---
 
@@ -620,3 +621,174 @@ The Speech-Only training pipeline learns robust emotional speech representations
 - Temporal sequence modeling
 
 to perform high-accuracy speech emotion recognition.
+
+
+#### 📊 c. Testing & Evaluation Pipeline
+
+The Speech-Only evaluation pipeline measures the model’s ability to generalize on unseen speech samples using multiple quantitative and visualization-based evaluation techniques.
+
+The testing workflow includes:
+
+- Test dataset loading
+- Model checkpoint loading
+- Inference generation
+- Accuracy metric computation
+- Confusion matrix generation
+- t-SNE latent space visualization
+- Performance report export
+
+---
+
+##### 📂 Test Dataset Loading
+
+Evaluation samples are loaded from:
+
+```bash
+Data_split/test_split.csv
+```
+
+The testing pipeline uses the same `TESSSpeechDataset` preprocessing pipeline used during training to ensure consistent feature generation and inference behavior.
+
+The test loader processes samples in deterministic order using:
+
+```python
+DataLoader(..., shuffle=False)
+```
+
+to preserve stable evaluation consistency.
+
+---
+
+##### 💾 Loading Trained Weights
+
+The trained Speech-Only model weights are loaded from:
+
+```bash
+best_speech_model.pth
+```
+
+Storage location:
+
+```bash
+IIIT_project/
+└── best_speech_model.pth
+```
+
+The checkpoint stores the learned parameters obtained during validation-based training.
+
+---
+
+##### 🧠 Inference Pipeline
+
+During evaluation:
+
+1. Raw speech audio is loaded
+2. HuBERT embeddings are extracted
+3. MFCC acoustic features are generated
+4. Both feature representations are fused
+5. The fused representation passes through the BiLSTM network
+6. Temporal pooling generates emotional embeddings
+7. The classifier predicts final emotion probabilities
+
+The predicted emotion corresponds to the class with the highest probability score.
+
+---
+
+##### 📈 Classification Metrics
+
+The evaluation pipeline computes detailed classification metrics using:
+
+```python
+classification_report()
+```
+
+The generated metrics include:
+
+- Precision
+- Recall
+- F1-Score
+- Overall Accuracy
+- Macro Average
+- Weighted Average
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── speech_accuracy_table.csv
+```
+
+<p align="center">
+  <img src="assets/speech-accuracy-table.png" width="75%">
+</p>
+
+The Speech-Only model achieved an overall test accuracy of approximately **99.64%** on unseen evaluation samples, demonstrating highly robust emotional speech classification performance.
+
+---
+
+##### 🔥 Confusion Matrix Analysis
+
+A confusion matrix is generated using:
+
+```python
+confusion_matrix()
+```
+
+to visualize class-wise prediction performance and misclassification behavior.
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── plots/
+        └── Speech_model/
+            └── confusion_matrix.png
+```
+
+<p align="center">
+  <img src="assets/speech-confusion-matrix.png" width="70%">
+</p>
+
+The confusion matrix shows near-perfect class separation across all seven emotional categories, with only minimal confusion observed between emotionally similar speech classes.
+
+---
+
+##### 🌌 t-SNE Latent Space Visualization
+
+The learned BiLSTM emotional embeddings are projected into 2D space using:
+
+```python
+TSNE()
+```
+
+to visualize how effectively the model separates emotional speech representations in latent feature space.
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── plots/
+        └── Speech_model/
+            └── tsne.png
+```
+
+<p align="center">
+  <img src="assets/speech-tsne.png" width="75%">
+</p>
+
+The t-SNE visualization demonstrates strong inter-class separability, where emotionally distinct speech samples form highly compact and well-separated clusters in latent space.
+
+---
+
+##### 📊 Evaluation Summary
+
+The Speech-Only evaluation pipeline demonstrates that the architecture successfully learns highly discriminative emotional speech representations using:
+
+- Contextual HuBERT embeddings
+- MFCC acoustic features
+- Temporal BiLSTM sequence modeling
+
+The near-perfect classification metrics and clearly separated latent clusters indicate strong generalization capability on unseen emotional speech samples.
