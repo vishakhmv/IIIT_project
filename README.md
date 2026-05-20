@@ -1133,6 +1133,575 @@ The evaluation workflow includes:
 
 ---
 
+### 🔀 Multimodal Fusion Model
+
+The Multimodal Fusion pipeline predicts emotions by jointly learning from both speech and textual representations.
+
+Unlike the standalone Speech-Only and Text-Only architectures, this model combines acoustic speech features with contextual semantic language embeddings to create a unified multimodal emotional representation.
+
+The fusion architecture integrates:
+
+- Contextual speech embeddings from HuBERT
+- MFCC acoustic speech features
+- Transformer-based semantic text embeddings from DistilBERT
+
+to perform robust multimodal emotion recognition.
+
+---
+
+#### 🏗️ a. System Architecture
+
+The Multimodal Fusion architecture combines parallel speech and text processing branches into a unified multimodal emotional representation for final emotion classification.
+
+<p align="center">
+  <img src="assets/fusion-model-architecture.png" width="95%">
+</p>
+
+---
+
+##### 🎙️ a.1. Speech Input Branch
+
+The speech branch processes raw audio signals to extract contextual and handcrafted acoustic speech representations.
+
+Each speech sample undergoes:
+
+- Audio loading
+- Silence trimming
+- Fixed-length padding/truncation
+- Sample rate normalization
+- MFCC feature extraction preparation
+
+The architecture extracts two complementary speech representations in parallel.
+
+---
+
+##### 🧠 HuBERT Contextual Speech Embeddings
+
+Raw speech waveforms are passed through the pretrained:
+
+```python
+HubertModel.from_pretrained("facebook/hubert-base-ls960")
+```
+
+model.
+
+HuBERT generates contextual speech embeddings that capture:
+
+- Prosody
+- Temporal speech structure
+- Acoustic context
+- Emotional speech dynamics
+- High-level speech semantics
+
+The pretrained HuBERT parameters are frozen during training to preserve learned speech representations and reduce computational complexity.
+
+---
+
+##### 🎼 MFCC Acoustic Features
+
+In parallel, handcrafted MFCC (Mel-Frequency Cepstral Coefficient) features are extracted using `librosa`.
+
+MFCC features capture low-level acoustic characteristics including:
+
+- Pitch
+- Tone
+- Spectral structure
+- Frequency distribution
+- Vocal tract variations
+
+These handcrafted descriptors complement the contextual HuBERT embeddings.
+
+---
+
+##### ⏳ Speech Temporal Modeling
+
+The HuBERT embeddings and MFCC features are concatenated together and passed through a Bidirectional LSTM (BiLSTM) network.
+
+The BiLSTM learns temporal emotional dependencies across speech sequences including:
+
+- Emotional transitions
+- Speaking rhythm
+- Prosodic variations
+- Sequential acoustic patterns
+
+Global temporal pooling is then applied to generate a compact speech emotional embedding.
+
+---
+
+##### 📝 a.2. Text Input Branch
+
+The text branch processes speech transcripts using transformer-based contextual language embeddings.
+
+Example input:
+
+```text
+"say the word back"
+```
+
+The textual inputs are tokenized using:
+
+```python
+DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+```
+
+before being passed into the transformer encoder.
+
+---
+
+##### 🧠 DistilBERT Semantic Embeddings
+
+The tokenized text is processed using the pretrained:
+
+```python
+DistilBertModel.from_pretrained('distilbert-base-uncased')
+```
+
+language model.
+
+DistilBERT generates contextual semantic embeddings that capture:
+
+- Linguistic structure
+- Contextual word relationships
+- Sentence-level semantics
+- Transformer attention dependencies
+
+The `[CLS]` token embedding is extracted as the final sentence-level semantic representation.
+
+The pretrained DistilBERT parameters are frozen during training to preserve pretrained language knowledge.
+
+---
+
+##### 🔗 Multimodal Feature Fusion
+
+The pooled speech embedding and DistilBERT semantic embedding are concatenated together to form a unified multimodal emotional representation.
+
+This fusion mechanism enables the architecture to simultaneously learn from:
+
+- Acoustic emotional cues
+- Temporal speech dynamics
+- Semantic language information
+
+The fused representation provides richer emotional context compared to using either modality independently.
+
+---
+
+##### 🎯 Emotion Classification Head
+
+The fused multimodal representation is passed through a fully connected classification head consisting of:
+
+- Linear Layers
+- Layer Normalization
+- ReLU Activation
+- Dropout Regularization
+
+The classifier predicts one of the following seven emotional categories:
+
+| Emotion | Label |
+|---|---|
+| Angry | 0 |
+| Disgust | 1 |
+| Fear | 2 |
+| Happy | 3 |
+| Neutral | 4 |
+| Pleasant Surprise | 5 |
+| Sad | 6 |
+
+---
+
+##### 📤 Final Output
+
+The final output of the Multimodal Fusion architecture is a probability distribution across all emotional categories.
+
+The emotion with the highest probability score is selected as the predicted emotional state by jointly analyzing both speech and textual modalities.
+#### 🏋️ b. Training Pipeline
+
+The Multimodal Fusion training pipeline jointly learns emotional representations from both speech and textual modalities using supervised deep learning.
+
+The architecture combines:
+
+- Contextual speech embeddings
+- Handcrafted acoustic speech features
+- Transformer-based semantic language embeddings
+
+to create a unified multimodal emotional representation for emotion classification.
+
+---
+
+##### 📂 Dataset Loading
+
+Training samples are loaded from:
+
+```bash
+Data_split/train_split.csv
+```
+
+using:
+
+```python
+pd.read_csv()
+```
+
+The CSV file contains:
+
+| Column | Description |
+|---|---|
+| path | Relative audio file path |
+| text | Speech transcript |
+| label_encoded | Numerical emotion label |
+
+The multimodal training pipeline simultaneously uses:
+
+- `path` → Speech modality input
+- `text` → Text modality input
+- `label_encoded` → Emotion supervision label
+
+---
+
+##### ✂️ Training–Validation Split
+
+The complete training dataset is further divided into:
+
+- Training Set
+- Validation Set
+
+using Scikit-learn’s:
+
+```python
+train_test_split()
+```
+
+utility with:
+
+- **15% validation split**
+- **Stratified class balancing**
+- **Random state = 42**
+
+This preserves balanced emotional distributions across both subsets.
+
+The validation dataset is used to:
+
+- Monitor generalization performance
+- Track validation accuracy
+- Prevent overfitting
+- Save the best-performing model checkpoint
+
+---
+
+##### 🎙️ Speech Preprocessing
+
+Each speech sample undergoes multiple preprocessing operations before feature extraction.
+
+The speech preprocessing pipeline performs:
+
+- Audio loading using `librosa`
+- Silence trimming
+- Fixed-length padding/truncation
+- Sample rate normalization
+- MFCC feature extraction
+
+Audio samples are standardized to fixed-duration waveforms for stable multimodal batch processing.
+
+---
+
+##### 📝 Text Preprocessing
+
+The textual transcripts are processed using the pretrained:
+
+```python
+DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+```
+
+tokenizer.
+
+Each text sample undergoes:
+
+- Tokenization
+- Attention mask generation
+- Sequence padding
+- Sequence truncation
+
+All text sequences are converted into fixed-length transformer-compatible representations before training.
+
+---
+
+##### 📦 Multimodal Dataset Pipeline
+
+The processed speech and text samples are loaded using the custom:
+
+```python
+TESSMultimodalDataset
+```
+
+dataset and PyTorch `DataLoader` pipelines.
+
+Each training sample simultaneously contains:
+
+- Raw speech waveform
+- MFCC acoustic features
+- Tokenized text embeddings
+- Attention masks
+- Emotion labels
+
+Training configuration:
+
+```python
+batch_size = 32
+shuffle = True
+```
+
+Validation configuration:
+
+```python
+batch_size = 32
+shuffle = False
+```
+
+The shuffled training loader improves generalization, while deterministic validation loading ensures stable evaluation consistency.
+
+---
+
+##### 🧠 Parallel Feature Extraction
+
+During training, the architecture extracts multimodal representations using parallel speech and text processing branches.
+
+---
+
+##### 1. Speech Feature Extraction
+
+The speech branch extracts:
+
+- Contextual HuBERT embeddings
+- MFCC acoustic features
+
+The pretrained:
+
+```python
+HubertModel.from_pretrained("facebook/hubert-base-ls960")
+```
+
+model generates contextual speech embeddings directly from raw audio waveforms.
+
+The HuBERT parameters remain frozen during training to preserve pretrained speech knowledge and reduce computational overhead.
+
+---
+
+##### 2. Text Feature Extraction
+
+The text branch extracts contextual semantic embeddings using pretrained DistilBERT.
+
+The pretrained:
+
+```python
+DistilBertModel.from_pretrained('distilbert-base-uncased')
+```
+
+model generates transformer-based semantic language representations from textual input.
+
+The `[CLS]` token embedding acts as the sentence-level semantic representation.
+
+The DistilBERT parameters remain frozen during training to preserve pretrained language knowledge.
+
+---
+
+##### ⏳ Speech Temporal Modeling
+
+After extracting the HuBERT embeddings and MFCC features, the combined speech representations are processed through a Bidirectional Long Short-Term Memory (BiLSTM) network.
+
+The BiLSTM learns:
+
+- Emotional transitions
+- Sequential speech dynamics
+- Temporal prosodic patterns
+- Contextual acoustic dependencies
+
+Bidirectional processing allows the network to capture emotional information from both forward and backward temporal directions.
+
+Global temporal pooling is applied after BiLSTM processing to generate a compact, fixed-dimensional emotional speech embedding.
+
+---
+
+##### 🔗 Multimodal Feature Fusion (Late Fusion)
+
+The pooled speech representation (from the BiLSTM) and the DistilBERT semantic embedding (the `[CLS]` token) are concatenated together along the feature dimension to create a unified multimodal emotional representation.
+
+This fusion mechanism enables the architecture to jointly learn from:
+
+- Acoustic emotional cues
+- Temporal speech dynamics
+- Semantic contextual information
+
+The fused representation contains richer emotional information than either modality independently, serving as the ultimate joint-feature vector for the network.
+
+---
+
+##### 🎯 Emotion Classification
+
+The final fused multimodal representation is passed through a fully connected classification head consisting of:
+
+- Linear Layers
+- Layer Normalization
+- ReLU Activation
+- Dropout Regularization
+
+The classifier predicts one of the seven emotional categories.
+
+---
+
+##### 📉 Loss Function
+
+The training pipeline uses:
+
+```python
+CrossEntropyLoss()
+```
+
+to measure prediction error between:
+
+- Predicted emotion probabilities
+- Ground-truth emotion labels
+
+This loss function is suitable for multi-class multimodal emotion classification tasks.
+
+---
+
+##### ⚙️ Optimization Strategy
+
+The multimodal fusion model parameters are optimized using:
+
+```python
+torch.optim.AdamW()
+```
+
+Optimization configuration:
+
+| Parameter | Value |
+|---|---|
+| Learning Rate | `1e-4` |
+| Weight Decay | `1e-2` |
+| Batch Size | `32` |
+| Epochs | `10` |
+
+The optimizer updates trainable fusion and classification parameters using gradient-based backpropagation.
+
+---
+
+##### 🔄 Backpropagation & Parameter Updates
+
+For each training batch:
+
+1. Speech and text features are extracted
+2. Speech temporal embeddings are generated
+3. Semantic text embeddings are extracted
+4. Multimodal features are fused
+5. Emotion probabilities are predicted
+6. Loss is computed
+7. Gradients are calculated
+8. Model parameters are updated
+
+The pipeline continuously minimizes training loss across epochs to improve multimodal emotional understanding.
+
+---
+
+##### 📈 Validation Monitoring
+
+After each epoch, the model is evaluated on the validation dataset.
+
+The training pipeline tracks:
+
+- Training Loss
+- Validation Loss
+- Training Accuracy
+- Validation Accuracy
+
+These metrics help analyze:
+
+- Fusion learning stability
+- Model convergence
+- Generalization capability
+- Overfitting behavior
+
+---
+
+##### 💾 Best Model Checkpoint Saving
+
+The best-performing multimodal fusion model weights are automatically saved based on validation accuracy improvements.
+
+Generated output:
+
+```bash
+IIIT_project/
+└── best_fusion_model.pth
+```
+
+This checkpoint stores the learned parameters of the Multimodal Fusion architecture and is later used during testing and inference.
+
+---
+
+##### 📊 Learning Curve Generation
+
+Learning curves are automatically generated to visualize:
+
+- Loss Profiles
+- Accuracy Profiles
+- Validation Stability
+- Fusion Learning Convergence
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── plots/
+        └── Fusion_model/
+            └── learning_curves.png
+```
+
+<p align="center">
+  <img src="assets/fusion-learning-curve.png" width="80%">
+</p>
+
+The learning curves demonstrate rapid convergence with consistently low validation loss and near-perfect validation accuracy.
+
+Compared to the standalone Text-Only model, the Multimodal Fusion architecture learns significantly more stable and discriminative emotional representations by combining:
+
+- Acoustic speech information
+- Temporal speech dynamics
+- Semantic contextual language embeddings
+
+The close alignment between training and validation curves also indicates strong generalization performance with minimal overfitting.
+
+---
+
+##### ✅ Final Outcome
+
+The Multimodal Fusion training pipeline successfully learns complementary emotional representations from both speech and text modalities.
+
+By combining:
+
+- Contextual speech embeddings
+- Handcrafted acoustic features
+- Temporal sequence modeling
+- Transformer-based semantic embeddings
+
+the architecture achieves highly robust multimodal emotion recognition performance compared to standalone unimodal models. performance compared to standalone unimodal models.
+
+
+#### 📊 c. Testing & Evaluation Pipeline
+
+The Multimodal Fusion evaluation pipeline measures the model’s ability to generalize on unseen multimodal samples using quantitative metrics and latent-space visualization techniques.
+
+The evaluation workflow includes:
+
+- Test dataset loading
+- Model checkpoint loading
+- Multimodal inference generation
+- Accuracy metric computation
+- Confusion matrix generation
+- t-SNE latent space visualization
+- Performance report export
+
+---
+
 ##### 📂 Test Dataset Loading
 
 Evaluation samples are loaded from:
@@ -1147,7 +1716,21 @@ using:
 pd.read_csv()
 ```
 
-The testing pipeline uses the same `TESSTextDataset` preprocessing pipeline used during training to ensure consistent tokenization and transformer input generation.
+The testing pipeline uses the same:
+
+```python
+TESSMultimodalDataset
+```
+
+preprocessing pipeline used during training to ensure consistent speech and text feature generation.
+
+Each evaluation sample contains:
+
+- Raw speech waveform
+- MFCC acoustic features
+- Tokenized text embeddings
+- Attention masks
+- Emotion labels
 
 The test loader processes samples using:
 
@@ -1161,32 +1744,36 @@ to preserve deterministic evaluation consistency.
 
 ##### 💾 Loading Trained Weights
 
-The trained Text-Only model weights are loaded from:
+The trained Multimodal Fusion model weights are loaded from:
 
 ```bash
-best_text_model.pth
+best_fusion_model.pth
 ```
 
 Storage location:
 
 ```bash
 IIIT_project/
-└── best_text_model.pth
+└── best_fusion_model.pth
 ```
 
-The checkpoint stores the learned parameters of the Text-Only classification model obtained during validation-based training.
+The checkpoint stores the learned parameters of the multimodal fusion architecture obtained during validation-based training.
 
 ---
 
-##### 🧠 Transformer Inference Pipeline
+##### 🧠 Multimodal Inference Pipeline
 
 During evaluation:
 
-1. Input text is tokenized
-2. Attention masks are generated
-3. DistilBERT contextual embeddings are extracted
-4. CLS token embeddings are generated
-5. The classification head predicts emotional probabilities
+1. Raw speech audio is loaded
+2. HuBERT contextual speech embeddings are extracted
+3. MFCC acoustic features are generated
+4. Speech features are processed through the BiLSTM network
+5. Temporal pooling generates compact speech embeddings
+6. Text transcripts are tokenized using DistilBERT tokenizer
+7. DistilBERT semantic embeddings are extracted
+8. Speech and text embeddings are fused together
+9. The classifier predicts final emotion probabilities
 
 The predicted emotion corresponds to the class with the highest probability score.
 
@@ -1214,16 +1801,25 @@ Generated output:
 ```bash
 IIIT_project/
 └── Results/
-    └── text_accuracy_table.csv
+    └── fusion_accuracy_table.csv
 ```
 
 <p align="center">
-  <img src="assets/text-accuracy-table.png" width="75%">
+  <img src="assets/fusion-accuracy-table.png" width="75%">
 </p>
 
-The Text-Only model achieved an overall test accuracy of approximately **14.28%**, with extremely low precision, recall, and F1-scores across most emotional categories.
+The Multimodal Fusion model achieved an overall test accuracy of approximately **99.28%** on unseen evaluation samples.
 
-This performance is close to random guessing across seven classes, indicating that semantic text information alone is insufficient for reliable emotion recognition in the TESS dataset.
+The generated classification metrics demonstrate extremely strong performance across nearly all emotional categories, with precision, recall, and F1-scores remaining close to perfect values for most classes.
+
+Only minimal performance degradation is observed for emotionally similar categories such as:
+
+- Neutral
+- Pleasant Surprise
+- Disgust
+- Sad
+
+which still maintain exceptionally high classification performance.
 
 ---
 
@@ -1235,7 +1831,7 @@ A confusion matrix is generated using:
 confusion_matrix()
 ```
 
-to visualize class-wise prediction behavior and semantic confusion patterns.
+to visualize class-wise prediction behavior and multimodal classification performance.
 
 Generated output:
 
@@ -1243,23 +1839,30 @@ Generated output:
 IIIT_project/
 └── Results/
     └── plots/
-        └── Text_model/
+        └── Fusion_model/
             └── confusion_matrix.png
 ```
 
 <p align="center">
-  <img src="assets/text-confusion-matrix.png" width="70%">
+  <img src="assets/fusion-confusion-matrix.png" width="70%">
 </p>
 
-The confusion matrix shows severe prediction collapse, where the model predicts nearly all samples as a single emotional category.
+The confusion matrix demonstrates near-perfect emotional class separation across all seven categories.
 
-This indicates that the transformer model was unable to learn discriminative semantic representations for different emotions.
+Most emotions are classified with 100% accuracy, while only a few minor misclassifications occur between emotionally related categories:
+
+- Neutral → Sad
+- Pleasant Surprise → Disgust
+
+These small confusions indicate that the model learns highly discriminative multimodal emotional representations while still reflecting subtle emotional overlap between certain speech patterns.
+
+Compared to the Text-Only model, the fusion architecture shows dramatically improved emotional discrimination due to the inclusion of rich acoustic speech information.
 
 ---
 
 ##### 🌌 t-SNE Latent Space Visualization
 
-The learned DistilBERT semantic embeddings are projected into 2D space using:
+The learned multimodal embeddings are projected into 2D space using:
 
 ```python
 TSNE()
@@ -1273,63 +1876,64 @@ Generated output:
 IIIT_project/
 └── Results/
     └── plots/
-        └── Text_model/
+        └── Fusion_model/
             └── tsne.png
 ```
 
 <p align="center">
-  <img src="assets/text-tsne.png" width="75%">
+  <img src="assets/fusion-tsne.png" width="75%">
 </p>
 
-The t-SNE visualization shows highly overlapping emotional representations with no clearly separable clusters.
+The t-SNE visualization demonstrates highly compact and clearly separated emotional clusters in latent feature space.
 
-Unlike the Speech-Only model, the semantic embeddings fail to organize into meaningful emotional groupings in latent space.
+Unlike the Text-Only model, where emotional embeddings heavily overlap, the fusion model organizes emotional representations into distinct regions with strong inter-class separation.
+
+This indicates that the architecture successfully learns robust multimodal emotional representations by combining:
+
+- Contextual speech embeddings
+- Acoustic MFCC features
+- Temporal speech dynamics
+- Semantic language information
+
+The strong clustering behavior further validates the effectiveness of multimodal fusion for emotion recognition.
 
 ---
 
-##### ⚠️ Failure Analysis
+##### 🧩 Why Fusion Works Despite Text-Only Failure
 
-The Text-Only model demonstrated extremely poor generalization performance on the TESS dataset because the dataset provides very limited emotion-specific semantic information.
+Although the Text-Only model performs poorly on the TESS dataset, the Multimodal Fusion architecture still achieves extremely high accuracy because the fusion model primarily relies on the highly informative acoustic speech modality.
 
-The TESS dataset uses nearly identical carrier phrases across all emotional categories.
+In the TESS dataset:
 
-For example, the sentence:
-
-```text
-"say the word back"
-```
-
-appears in all seven emotions:
-
-- Angry
-- Disgust
-- Fear
-- Happy
-- Neutral
-- Pleasant Surprise
-- Sad
-
-with only the vocal delivery changing.
+- Speech signals contain strong emotional information through tone, pitch, prosody, and vocal dynamics
+- Text transcripts contain limited semantic emotional variation
 
 As a result:
 
-- The textual modality contains minimal emotional variance
-- DistilBERT cannot learn meaningful semantic emotion separation
-- The model collapses toward dominant prediction behavior
-- Latent representations fail to form separable emotional clusters
+- The speech branch dominates emotional discrimination
+- The text branch acts as a supplementary contextual modality
+- Fusion improves representation robustness rather than replacing speech understanding
 
-This behavior demonstrates a major limitation of standalone semantic emotion recognition and highlights the critical importance of acoustic speech information for understanding human emotions in the TESS dataset.
+The multimodal architecture therefore benefits from combining:
+
+- Strong acoustic emotional cues
+- Weak but complementary semantic information
+
+This demonstrates an important principle in multimodal learning:
+
+> Even weak modalities can improve representation stability when combined with highly informative modalities.
 
 ---
 
 ##### 📊 Evaluation Summary
 
-The Text-Only evaluation pipeline demonstrates that transformer-based semantic representations alone are insufficient for robust emotion recognition on linguistically constrained datasets such as TESS.
+The Multimodal Fusion evaluation pipeline demonstrates that combining speech and text modalities produces significantly stronger emotional representations than standalone unimodal approaches.
 
-The failure of semantic-only learning motivates the need for:
+By integrating:
 
-- Acoustic speech representations
-- Prosodic information
-- Multimodal feature fusion
+- Contextual HuBERT speech embeddings
+- MFCC acoustic features
+- Temporal BiLSTM sequence modeling
+- DistilBERT semantic language embeddings
 
-for effective emotional understanding.
+the architecture achieves highly robust multimodal emotion recognition performance with strong generalization capability on unseen emotional speech samples.
