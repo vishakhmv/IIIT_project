@@ -1,4 +1,4 @@
-# 🎭 Multimodal Emotion Recognition (Speech + Text Fusion)
+# 🎭 Multimodal Emotion Recognition (Speech and Text)
 
 ## 📖 Description
 
@@ -51,12 +51,6 @@ The dataset uses linguistically neutral carrier phrases such as:
 
 All emotional categories contain the same spoken sentences, ensuring that emotional variation primarily comes from vocal expression rather than changes in textual content.
 
----
-
-### Data Split
-
-The dataset is divided using an **80% Training / 20% Testing** split while maintaining balanced emotion distributions during evaluation.
-
 
 ## 📦 Data Extraction & Splitting
 
@@ -72,14 +66,14 @@ The TESS dataset was extracted and processed using custom preprocessing scripts 
 
 The compressed TESS dataset archive was extracted from Google Drive and verified before preprocessing.
 
-### Extraction Pipeline
+#### Extraction Pipeline
 
 - Mounted Google Drive for dataset access
 - Loaded the compressed dataset archive
 - Extracted audio files using Python's `zipfile` utilities
 - Verified extracted folder structure and audio contents
 
-### Output Structure
+#### Output Structure
 
 ```bash
 /content/tess_dataset/
@@ -99,7 +93,7 @@ The preprocessing pipeline created paired speech-text samples by extracting:
 
 ---
 
-### 📝 Transcript Generation
+#### 📝 Transcript Generation
 
 The TESS dataset only contains audio files and does not provide separate text transcripts.  
 Since the dataset follows fixed sentence patterns, text transcripts were generated directly from the audio filenames.
@@ -134,7 +128,7 @@ This generated text was used as input for:
 - Text-Only Model
 - Multimodal Fusion Model
 
-### Example Speech-Text Pairs
+#### Example Speech-Text Pairs
 
 | Audio File | Generated Text |
 |---|---|
@@ -143,7 +137,7 @@ This generated text was used as input for:
 
 ---
 
-### 🏷️ Emotion Label Encoding
+#### 🏷️ Emotion Label Encoding
 
 Each emotion category was mapped into a numerical label for model training.
 
@@ -159,7 +153,7 @@ Each emotion category was mapped into a numerical label for model training.
 
 ---
 
-### 📊 Train-Test Split
+#### 📊 Train-Test Split
 
 The complete dataset was divided into:
 
@@ -172,7 +166,7 @@ The split preserved balanced emotion distributions across both datasets to ensur
 
 ---
 
-### 💾 Generated CSV Files
+#### 💾 Generated CSV Files
 
 The splitting pipeline generated two structured CSV files:
 
@@ -182,14 +176,14 @@ Data_split/
 └── test_split.csv
 ```
 
-### train_split.csv
+#### train_split.csv
 Contains all training samples used for:
 
 - Model learning
 - Feature extraction
 - Parameter optimization
 
-### test_split.csv
+#### test_split.csv
 Contains unseen testing samples used for:
 
 - Final evaluation
@@ -198,7 +192,7 @@ Contains unseen testing samples used for:
 
 ---
 
-### 📁 CSV Structure
+#### 📁 CSV Structure
 
 Each CSV file contains the following columns:
 
@@ -210,7 +204,7 @@ Each CSV file contains the following columns:
 
 ---
 
-### 📌 Example CSV Entry
+#### 📌 Example CSV Entry
 
 | path | text | label_encoded |
 |---|---|---|
@@ -218,7 +212,7 @@ Each CSV file contains the following columns:
 
 ---
 
-### ✅ Outcome
+#### ✅ Outcome
 
 The final preprocessing pipeline produced a clean and reproducible multimodal dataset structure suitable for:
 
@@ -235,98 +229,107 @@ This project consists of three independent deep learning pipelines:
 
 The Speech-Only pipeline predicts emotions directly from raw audio signals by learning acoustic speech features such as tone, pitch, energy, etc.
 
-### 🏋️ a. Training Pipeline
+#### 🏗️ a. System Architecture
 
-The Speech-Only training pipeline predicts emotions directly from raw audio signals using a hybrid deep learning architecture that combines pretrained speech representations, handcrafted acoustic features, and temporal sequence modeling.
+The Speech-Only architecture predicts emotions directly from raw speech audio by combining pretrained contextual speech embeddings, handcrafted acoustic features, and temporal sequence modeling.
 
----
-
-### 🧠 Model Architecture
-
-The training architecture integrates:
-
-- **HuBERT** for contextual speech representation learning
-- **MFCC Features** for acoustic feature extraction
-- **BiLSTM Layers** for temporal emotional pattern modeling
-- **Fully Connected Classification Head** for final emotion prediction
+<p align="center">
+  <img src="assets/speech-model-architecture.png" width="90%">
+</p>
 
 ---
 
-### 🔊 Audio Preprocessing
+##### 🔊 Input Audio
 
-Each audio sample undergoes multiple preprocessing stages before training:
+The model receives raw speech audio samples as input.
+
+Each audio sample undergoes multiple preprocessing operations before feature extraction:
 
 - Audio loading using `librosa`
 - Silence trimming
 - Fixed-length padding/truncation
-- MFCC feature extraction
-- Raw waveform preparation for HuBERT
+- Sample rate normalization
+- MFCC feature extraction preparation
 
-All audio samples are standardized to a fixed duration for consistent batch training.
+To ensure consistent batch processing, all audio samples are standardized to a fixed duration and sampling rate.
 
 ---
 
-### 🎼 Feature Extraction
+##### 🎼 Parallel Feature Extraction
 
-The model extracts two complementary speech representations from every audio sample.
+The architecture extracts two complementary speech representations simultaneously:
 
-### 1. HuBERT Embeddings
+---
 
-A pretrained **HuBERT (`facebook/hubert-base-ls960`)** model generates contextual speech embeddings directly from raw audio waveforms.
+##### 1. HuBERT Contextual Speech Embeddings
 
-These embeddings capture:
+The raw waveform is passed through a pretrained **HuBERT (`facebook/hubert-base-ls960`)** model.
+
+HuBERT generates high-dimensional contextual speech embeddings that capture:
 
 - Speech context
 - Prosody
 - Temporal speech structure
-- High-level acoustic patterns
+- High-level acoustic semantics
+- Phonetic and emotional speech patterns
 
-The pretrained HuBERT weights are frozen during training to preserve learned speech representations.
+The pretrained HuBERT weights are frozen during training to preserve learned speech representations and reduce computational overhead.
 
 ---
 
-### 2. MFCC Acoustic Features
+##### 2. MFCC Acoustic Features
 
-MFCC features are extracted using `librosa` to capture low-level acoustic characteristics such as:
+In parallel, MFCC (Mel-Frequency Cepstral Coefficient) features are extracted from the speech signal using `librosa`.
+
+MFCC features capture low-level acoustic characteristics such as:
 
 - Pitch
 - Tone
 - Frequency distribution
 - Spectral variations
+- Vocal tract characteristics
 
-The MFCC features are then combined with HuBERT embeddings to create a richer emotional speech representation.
+These handcrafted acoustic descriptors complement the contextual HuBERT representations.
 
 ---
 
-### 🔗 Feature Fusion
+##### 🔗 Feature Fusion
 
-The extracted HuBERT embeddings and MFCC features are concatenated along the feature dimension to form a unified acoustic representation.
+The HuBERT embeddings and MFCC acoustic features are concatenated together along the feature dimension to create a unified speech representation.
 
-This fusion allows the model to learn from both:
+This fusion mechanism enables the architecture to simultaneously learn from:
 
-- Deep contextual speech embeddings
+- Deep contextual speech representations
 - Traditional handcrafted acoustic features
 
-simultaneously.
+The fused representation provides richer emotional information compared to using either representation independently.
 
 ---
 
-### ⏳ Temporal Sequence Modeling
+##### ⏳ Temporal Sequence Modeling
 
-The fused speech representation is passed through a **Bidirectional LSTM (BiLSTM)** network.
+The combined speech representation is passed through a **Bidirectional Long Short-Term Memory (BiLSTM)** network.
 
-The BiLSTM learns temporal emotional dependencies across speech frames by modeling:
+The BiLSTM models sequential emotional dependencies across speech frames and learns temporal speech dynamics such as:
 
 - Emotional transitions
 - Speaking rhythm
-- Sequential acoustic dynamics
-- Prosodic variations over time
+- Temporal prosodic variations
+- Sequential acoustic patterns
 
-Global temporal pooling is applied after the BiLSTM to generate a compact emotional embedding.
+Bidirectional processing allows the network to capture contextual dependencies from both forward and backward directions in the speech sequence.
 
 ---
 
-### 🎯 Emotion Classification
+##### 🌐 Global Temporal Pooling
+
+After BiLSTM processing, global temporal pooling is applied across all time steps.
+
+This operation compresses the sequential BiLSTM outputs into a compact fixed-dimensional emotional embedding representing the overall emotional characteristics of the speech sample.
+
+---
+
+##### 🎯 Emotion Classification Head
 
 The pooled emotional embedding is passed through a fully connected classification head consisting of:
 
@@ -335,13 +338,45 @@ The pooled emotional embedding is passed through a fully connected classificatio
 - ReLU Activation
 - Dropout Regularization
 
-The classifier predicts one of the seven emotional categories.
+The classifier predicts one of the following seven emotional categories:
+
+| Emotion | Label |
+|---|---|
+| Angry | 0 |
+| Disgust | 1 |
+| Fear | 2 |
+| Happy | 3 |
+| Neutral | 4 |
+| Pleasant Surprise | 5 |
+| Sad | 6 |
 
 ---
 
-### 📊 Dataset Loading
+##### 📤 Final Output
 
-Training samples are loaded directly from:
+The final output of the architecture is a probability distribution across all emotion classes.
+
+The emotion with the highest probability score is selected as the predicted emotional state of the input speech sample.
+
+#### 🏋️ b. Training Pipeline
+
+The Speech-Only training pipeline learns emotional representations directly from speech signals using supervised deep learning.
+
+The complete training workflow includes:
+
+- Dataset loading
+- Audio preprocessing
+- Acoustic feature extraction
+- Temporal sequence learning
+- Emotion classification
+- Validation monitoring
+- Checkpoint saving
+
+---
+
+##### 📂 Dataset Loading
+
+Training samples are loaded from:
 
 ```bash
 Data_split/train_split.csv
@@ -355,59 +390,233 @@ The CSV file contains:
 | text | Generated transcript |
 | label_encoded | Numerical emotion label |
 
-The training dataset is further divided into:
+The dataset is loaded using the custom `TESSSpeechDataset` class implemented in PyTorch.
+
+---
+
+##### ✂️ Training–Validation Split
+
+The original training dataset is further divided into:
 
 - Training Set
 - Validation Set
 
-to monitor generalization performance during learning.
+using:
+
+```python
+train_test_split()
+```
+
+with stratified sampling to preserve balanced emotion distributions across both subsets.
+
+The validation dataset is used to:
+
+- Monitor generalization performance
+- Track validation accuracy
+- Prevent overfitting
+- Save the best-performing model weights
 
 ---
 
-### ⚙️ Optimization Strategy
+##### 🔊 Audio Preprocessing
+
+Before feature extraction, every audio sample undergoes multiple preprocessing stages.
+
+The preprocessing pipeline performs:
+
+- Audio loading using `librosa`
+- Silence trimming
+- Fixed-length padding/truncation
+- Sample rate normalization
+- MFCC feature extraction preparation
+
+All speech samples are standardized to a fixed duration to ensure consistent batch processing during training.
+
+---
+
+##### 🎼 Feature Preparation
+
+For each audio sample, the training pipeline generates two complementary speech representations.
+
+##### 1. Raw Waveform Input
+
+The raw speech waveform is directly passed into the pretrained HuBERT encoder for contextual speech representation learning.
+
+##### 2. MFCC Acoustic Features
+
+MFCC features are extracted using:
+
+```python
+librosa.feature.mfcc()
+```
+
+These features capture low-level acoustic properties such as:
+
+- Pitch
+- Tone
+- Spectral characteristics
+- Frequency distribution
+
+The extracted MFCC features are later fused with contextual HuBERT embeddings inside the architecture.
+
+---
+
+##### 🔗 Batch Loading Pipeline
+
+The processed samples are loaded using PyTorch `DataLoader` objects.
+
+Two separate data loaders are created:
+
+- Training Loader
+- Validation Loader
+
+```python
+train_loader = DataLoader(...)
+val_loader = DataLoader(...)
+```
+
+The training loader uses shuffled batches for randomized learning, while the validation loader preserves deterministic ordering during evaluation.
+
+---
+
+##### 🧠 Forward Propagation
+
+During each training iteration:
+
+1. Raw audio is passed through the pretrained HuBERT encoder
+2. MFCC acoustic features are extracted
+3. Both feature representations are fused together
+4. The fused representation passes through BiLSTM layers
+5. Temporal pooling generates compact emotional embeddings
+6. The classifier predicts emotion probabilities
+
+The final output is a probability distribution across all emotion classes.
+
+---
+
+##### 📉 Loss Function
 
 The training pipeline uses:
 
-- **AdamW Optimizer**
-- **CrossEntropy Loss**
-- **Dropout Regularization**
-- **Validation-based Checkpoint Saving**
+```python
+CrossEntropyLoss()
+```
 
-The best-performing model weights are automatically saved during training.
+to measure prediction error between:
+
+- Predicted emotion probabilities
+- Ground-truth emotion labels
+
+This loss function is suitable for multi-class emotion classification tasks.
 
 ---
 
-### 📈 Training Monitoring
+##### ⚙️ Optimization Strategy
 
-During training, the pipeline tracks:
+The model parameters are optimized using:
+
+```python
+torch.optim.AdamW()
+```
+
+The optimizer updates trainable parameters using gradient-based backpropagation.
+
+Training configuration:
+
+| Parameter | Value |
+|---|---|
+| Learning Rate | `1e-4` |
+| Weight Decay | `1e-2` |
+| Batch Size | `32` |
+| Epochs | `10` |
+
+---
+
+##### 🔄 Backpropagation & Parameter Updates
+
+For every training batch:
+
+1. Forward propagation is performed
+2. Loss is computed
+3. Gradients are calculated using backpropagation
+4. Optimizer updates trainable model parameters
+
+The pipeline continuously minimizes training loss across epochs to improve emotional classification performance.
+
+---
+
+##### 📈 Validation Monitoring
+
+After each epoch, the model is evaluated on the validation dataset.
+
+The training pipeline tracks:
 
 - Training Loss
 - Validation Loss
 - Training Accuracy
 - Validation Accuracy
 
-Learning curves are generated for performance visualization and convergence analysis.
+These metrics help analyze:
 
-### 💾 Generated Outputs
+- Model convergence
+- Generalization capability
+- Overfitting behavior
 
-```bash
-Results/
-└── plots/
-    └── Speech_model/
-        └── learning_curves.png
-```
+---
 
-The best-performing model weights obtained during validation are automatically saved as:
+##### 💾 Best Model Checkpoint Saving
+
+The pipeline automatically saves the best-performing model weights based on validation accuracy.
+
+Saved file:
 
 ```bash
 best_speech_model.pth
 ```
 
-This file stores the learned parameters of the Speech-Only deep learning model and is later loaded during the testing and evaluation phase for inference on unseen samples.
-
-### 💾 Storage Location
+Storage location:
 
 ```bash
 IIIT_project/
 └── best_speech_model.pth
 ```
+
+This checkpoint stores the learned parameters of the Speech-Only architecture and is later used during testing and inference.
+
+---
+
+##### 📊 Learning Curve Generation
+
+During training, learning curves are automatically generated for:
+
+- Loss Profiles
+- Accuracy Profiles
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Speech_only/
+    └── Results/
+        └── plots/
+            └── Speech_model/
+                └── learning_curves.png
+```
+
+The generated plots visualize training dynamics, convergence behavior, and validation performance across epochs.
+
+<p align="center">
+  <img src="assets/speech-learning-curves.png" width="80%">
+</p>
+
+---
+
+##### ✅ Final Outcome
+
+The Speech-Only training pipeline learns robust emotional speech representations by combining:
+
+- Contextual speech embeddings
+- Handcrafted acoustic features
+- Temporal sequence modeling
+
+to perform high-accuracy speech emotion recognition.
