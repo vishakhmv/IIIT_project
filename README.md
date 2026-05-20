@@ -1117,8 +1117,7 @@ The learning curves demonstrate extremely limited convergence and consistently l
 
 This behavior occurs because the TESS dataset uses nearly identical carrier phrases across all emotional categories, providing minimal emotion-specific semantic variation for the transformer model to learn.
 
-
-#### 📊 c. Testing & Evaluation Pipeline
+#### 📊 Testing & Evaluation Pipeline
 
 The Text-Only evaluation pipeline measures the model’s ability to generalize on unseen textual inputs using quantitative metrics and latent space visualization techniques.
 
@@ -1130,6 +1129,209 @@ The evaluation workflow includes:
 - Accuracy metric computation
 - Confusion matrix generation
 - t-SNE latent space visualization
+
+---
+
+##### 📂 Test Dataset Loading
+
+Evaluation samples are loaded from:
+
+```bash
+Data_split/test_split.csv
+```
+
+using:
+
+```python
+pd.read_csv()
+```
+
+The testing pipeline uses the same `TESSTextDataset` preprocessing pipeline used during training to ensure consistent tokenization and transformer input generation.
+
+The test loader processes samples using:
+
+```python
+DataLoader(..., shuffle=False)
+```
+
+to preserve deterministic evaluation consistency.
+
+---
+
+##### 💾 Loading Trained Weights
+
+The trained Text-Only model weights are loaded from:
+
+```bash
+best_text_model.pth
+```
+
+Storage location:
+
+```bash
+IIIT_project/
+└── best_text_model.pth
+```
+
+The checkpoint stores the learned parameters of the Text-Only classification model obtained during validation-based training.
+
+---
+
+##### 🧠 Transformer Inference Pipeline
+
+During evaluation:
+
+1. Input text is tokenized
+2. Attention masks are generated
+3. DistilBERT contextual embeddings are extracted
+4. CLS token embeddings are generated
+5. The classification head predicts emotional probabilities
+
+The predicted emotion corresponds to the class with the highest probability score.
+
+---
+
+##### 📈 Classification Metrics
+
+The evaluation pipeline computes detailed classification metrics using:
+
+```python
+classification_report()
+```
+
+The generated metrics include:
+
+- Precision
+- Recall
+- F1-Score
+- Overall Accuracy
+- Macro Average
+- Weighted Average
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── text_accuracy_table.csv
+```
+
+<p align="center">
+  <img src="assets/text-accuracy-table.png" width="75%">
+</p>
+
+The Text-Only model achieved an overall test accuracy of approximately **14.28%**, with extremely low precision, recall, and F1-scores across most emotional categories.
+
+This performance is close to random guessing across seven classes, indicating that semantic text information alone is insufficient for reliable emotion recognition in the TESS dataset.
+
+---
+
+##### 🔥 Confusion Matrix Analysis
+
+A confusion matrix is generated using:
+
+```python
+confusion_matrix()
+```
+
+to visualize class-wise prediction behavior and semantic confusion patterns.
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── plots/
+        └── Text_model/
+            └── confusion_matrix.png
+```
+
+<p align="center">
+  <img src="assets/text-confusion-matrix.png" width="70%">
+</p>
+
+The confusion matrix shows severe prediction collapse, where the model predicts nearly all samples as a single emotional category.
+
+This indicates that the transformer model was unable to learn discriminative semantic representations for different emotions.
+
+---
+
+##### 🌌 t-SNE Latent Space Visualization
+
+The learned DistilBERT semantic embeddings are projected into 2D space using:
+
+```python
+TSNE()
+```
+
+to visualize latent feature separability across emotional categories.
+
+Generated output:
+
+```bash
+IIIT_project/
+└── Results/
+    └── plots/
+        └── Text_model/
+            └── tsne.png
+```
+
+<p align="center">
+  <img src="assets/text-tsne.png" width="75%">
+</p>
+
+The t-SNE visualization shows highly overlapping emotional representations with no clearly separable clusters.
+
+Unlike the Speech-Only model, the semantic embeddings fail to organize into meaningful emotional groupings in latent space.
+
+---
+
+##### ⚠️ Failure Analysis
+
+The Text-Only model demonstrated extremely poor generalization performance on the TESS dataset because the dataset provides very limited emotion-specific semantic information.
+
+The TESS dataset uses identical carrier phrases across all emotional categories.
+
+For example, the sentence:
+
+```text
+"say the word back"
+```
+
+appears in all seven emotions:
+
+- Angry
+- Disgust
+- Fear
+- Happy
+- Neutral
+- Pleasant Surprise
+- Sad
+
+with only the vocal delivery changing.
+
+As a result:
+
+- The textual modality contains minimal emotional variance
+- DistilBERT cannot learn meaningful semantic emotion separation
+- The model collapses toward dominant prediction behavior
+- Latent representations fail to form separable emotional clusters
+
+This behavior demonstrates a major limitation of standalone semantic emotion recognition and highlights the critical importance of acoustic speech information for understanding human emotions in the TESS dataset.
+
+---
+
+##### 📊 Evaluation Summary
+
+The Text-Only evaluation pipeline demonstrates that transformer-based semantic representations alone are insufficient for robust emotion recognition on linguistically constrained datasets such as TESS.
+
+The failure of semantic-only learning motivates the need for:
+
+- Acoustic speech representations
+- Prosodic information
+- Multimodal feature fusion
+
+for effective emotional understanding.
 
 ---
 
