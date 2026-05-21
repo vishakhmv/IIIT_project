@@ -14,6 +14,14 @@ The repository contains three independent deep learning pipelines:
 
 The project also includes **representation learning analysis, t-SNE visualization, confusion matrices, and error analysis** to study the effectiveness of multimodal learning.
 
+## 🧠 Model Overview
+
+| Model | Input Modality | Main Backbone |
+|---|---|---|
+| Speech-Only | Audio | HuBERT + MFCC + BiLSTM |
+| Text-Only | Text | DistilBERT |
+| Multimodal Fusion | Audio + Text | HuBERT + MFCC + BiLSTM + DistilBERT |
+
 ## 📊 Dataset
 
 The models are trained and evaluated on the **TESS (Toronto Emotional Speech Set)** dataset.
@@ -229,6 +237,7 @@ This project consists of three independent deep learning pipelines:
 
 The Speech-Only pipeline predicts emotions directly from raw audio signals by learning acoustic speech features such as tone, pitch, energy, etc.
 
+---
 
 #### 🏗️ a. System Architecture
 
@@ -356,6 +365,7 @@ The final output of the architecture is a probability distribution across all em
 
 The emotion with the highest probability score is selected as the predicted emotional state of the input speech sample.
 
+---
 
 #### 🏋️ b. Training Pipeline
 
@@ -620,6 +630,8 @@ The Speech-Only training pipeline learns robust emotional speech representations
 - Temporal sequence modeling
 
 to perform high-accuracy speech emotion recognition.
+
+---
 
 
 #### 📊 c. Testing & Evaluation Pipeline
@@ -913,6 +925,7 @@ The final output of the architecture is a probability distribution across all em
 
 The emotion with the highest probability score is selected as the predicted emotional state of the input text sequence.
 
+---
 
 #### 🏋️ b. Training Pipeline
 
@@ -1115,6 +1128,8 @@ IIIT_project/
 The learning curves demonstrate extremely limited convergence and consistently low validation accuracy, highlighting the difficulty of performing emotion recognition using only semantic textual information from the TESS dataset.
 
 This behavior occurs because the TESS dataset uses nearly identical carrier phrases across all emotional categories, providing minimal emotion-specific semantic variation for the transformer model to learn.
+
+---
 
 #### 📊 Testing & Evaluation Pipeline
 
@@ -1559,6 +1574,7 @@ The final output of the Multimodal Fusion architecture is a probability distribu
 
 The emotion with the highest probability score is selected as the predicted emotional state by jointly analyzing both speech and textual modalities.
 
+---
 
 #### 🏋️ b. Training Pipeline
 
@@ -1930,8 +1946,9 @@ By combining:
 - Temporal sequence modeling
 - Transformer-based semantic embeddings
 
-the architecture achieves highly robust multimodal emotion recognition performance compared to standalone unimodal models. performance compared to standalone unimodal models.
+the architecture achieves highly robust multimodal emotion recognition performance compared to standalone unimodal models.
 
+---
 
 #### 📊 c. Testing & Evaluation Pipeline
 
@@ -2184,3 +2201,47 @@ By integrating:
 - DistilBERT semantic language embeddings
 
 the architecture achieves highly robust multimodal emotion recognition performance with strong generalization capability on unseen emotional speech samples.
+
+## 📈 Final Results Summary
+
+The comparative evaluation of all three architectures demonstrates the importance of acoustic speech information for robust emotion recognition on the TESS dataset.
+
+| Model | Input Modality | Test Accuracy |
+|---|---|---|
+| Speech-Only | Audio | 99.64% |
+| Text-Only | Text | 14.28% |
+| Multimodal Fusion | Audio + Text | 99.28% |
+
+---
+
+### 📊 Key Observations
+
+- The **Speech-Only Model** achieved the highest overall accuracy, demonstrating the effectiveness of contextual speech embeddings and temporal acoustic modeling for emotion recognition.
+
+- The **Text-Only Model** performed poorly because the TESS dataset contains nearly identical carrier phrases across all emotional categories, providing minimal semantic emotional variation.
+
+- The **Multimodal Fusion Model** achieved highly robust performance by combining:
+  - contextual speech embeddings,
+  - handcrafted acoustic features,
+  - temporal speech dynamics,
+  - and semantic language representations.
+
+- Multimodal fusion enables the architecture to simultaneously learn from:
+  - vocal emotion cues,
+  - speech prosody,
+  - acoustic frequency patterns,
+  - and contextual semantic information.
+
+- The fusion mechanism improves emotional representation learning by leveraging complementary strengths from both speech and text modalities, resulting in stronger generalization and more robust emotion classification.
+
+- The fusion architecture successfully learned complementary multimodal emotional representations while overcoming the limitations of standalone text-based learning.
+
+---
+
+### ✅ Final Conclusion
+
+This project demonstrates that acoustic speech information plays a dominant role in emotion recognition for linguistically constrained datasets such as TESS.
+
+The experimental results further show that multimodal learning can effectively integrate speech and language representations to build highly accurate and robust emotion recognition systems.
+
+
