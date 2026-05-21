@@ -2449,7 +2449,7 @@ After cloning the repository:
 2. Download and extract the TESS dataset
 3. Place the dataset and model weights in the correct directory structure
 
-The final directory structure should match the structure shown in the Project Structure section.
+The final directory structure should match the structure shown in the **Project Structure** section.
 
 ---
 
@@ -2464,3 +2464,103 @@ The GitHub repository does **not** include:
 These large files are intentionally excluded using `.gitignore`.
 
 Please download them separately using the links provided in the **Download Requirements** section before running the project.
+
+
+### 🛠️ 5. Install Dependencies
+
+Install all required Python libraries using:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+#### 📦 Main Dependencies
+
+The project primarily uses the following libraries and frameworks:
+
+| Library | Purpose |
+|---|---|
+| `PyTorch` | Deep learning framework for model training and inference |
+| `Transformers` | Provides pretrained HuBERT and DistilBERT models |
+| `Librosa` | Audio loading and MFCC feature extraction |
+| `Scikit-learn` | Dataset splitting, evaluation metrics, and t-SNE |
+| `Pandas` | CSV handling and structured data processing |
+| `NumPy` | Numerical computations and tensor preparation |
+| `Matplotlib` | Plot generation and visualization |
+| `Seaborn` | Confusion matrix and statistical visualizations |
+
+---
+
+
+#### ⚠️ Important Note
+
+The first execution may automatically download pretrained Hugging Face models including:
+
+- `facebook/hubert-base-ls960`
+- `distilbert-base-uncased`
+
+Ensure that your system has an active internet connection during the initial setup.
+
+
+### 🚀 6. Run Training
+
+> **Optional:**  
+> This step is only required if you want to retrain the models from scratch.
+>
+> If you only want to evaluate the pretrained models, you can directly proceed to the **🧪 Run Testing** section.
+
+---
+
+#### 🎙️ Train Speech-Only Model
+
+```bash
+python project/models/speech_pipeline/train.py
+```
+
+---
+
+#### 📝 Train Text-Only Model
+
+```bash
+python project/models/text_pipeline/train.py
+```
+
+---
+
+#### 🔀 Train Multimodal Fusion Model
+
+```bash
+python project/models/fusion_pipeline/train.py
+```
+
+---
+
+#### 📌 Training Outputs
+
+Training automatically generates:
+
+- pretrained model checkpoints (`.pth`)
+- learning curve visualizations
+
+Model checkpoints are stored in:
+
+```bash
+IIIT_project/
+├── best_speech_model.pth
+├── best_text_model.pth
+└── best_fusion_model.pth
+```
+
+Learning curve plots are stored in:
+
+```bash
+IIIT_project/
+└── project/
+    └── Results/
+        └── plots/
+            ├── Speech_model/
+            ├── Text_model/
+            └── Fusion_model/
+```
