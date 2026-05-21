@@ -1,6 +1,6 @@
 # 🎭 Multimodal Emotion Recognition (Speech and Text)
 
-## 📖 Description
+## 📖 Project Overview
 
 This project implements a **Multimodal Emotion Recognition System** capable of predicting human emotions using **speech-only, text-only, and combined speech-text inputs**.  
 
