@@ -2245,3 +2245,222 @@ This project demonstrates that acoustic speech information plays a dominant role
 The experimental results further show that multimodal learning can effectively integrate speech and language representations to build highly accurate and robust emotion recognition systems.
 
 
+## ⚙️ Installation & Usage
+
+### 📥 1. Download Requirements
+
+Before running the project, download the required dataset and pretrained model checkpoints.
+
+---
+
+#### 📊 TESS Dataset Setup
+
+Download the official TESS dataset in `.zip` format from Kaggle:
+
+* [Toronto Emotional Speech Set (TESS)](https://www.kaggle.com/datasets/ejlok1/toronto-emotional-speech-set-tess)
+
+After downloading:
+
+1. Keep the original compressed dataset as:
+
+```bash
+archive.zip
+```
+
+2. Extract the dataset folder:
+
+```bash
+TESS Toronto emotional speech set data/
+```
+
+3. Place both the `.zip` file and extracted dataset folder inside:
+
+```bash
+IIIT_PROJECT/
+└── TESS_dataset/
+    ├── archive.zip
+    └── TESS Toronto emotional speech set data/
+```
+
+---
+
+##### 📌 Why Both ZIP and Extracted Dataset Are Maintained
+
+Both versions are intentionally maintained because different project components use them differently.
+
+| File / Folder | Purpose |
+|---|---|
+| `archive.zip` | Used by `colab_data_extraction.py` during dataset extraction and preprocessing |
+| `TESS Toronto emotional speech set data/` | Used directly by dataset split generation, training, and testing pipelines |
+
+The extraction pipeline first reads the compressed archive and extracts the dataset locally.
+
+The dataset split generation script (`colab_data_split.py`) then scans the extracted dataset directory to create:
+
+- `train_split.csv`
+- `test_split.csv`
+
+All model pipelines (`train.py` and `test.py`) directly load audio samples from the extracted dataset folder.
+
+---
+
+##### ⚠️ Important Note
+
+If you are **only running the model training and testing pipelines** (`train.py` and `test.py`) using already generated dataset split CSV files, the `archive.zip` file is **not required**.
+
+Only the extracted dataset folder is necessary in that case:
+
+```bash
+TESS_dataset/
+└── TESS Toronto emotional speech set data/
+```
+
+The compressed `archive.zip` file is only required when running:
+
+- `colab_data_extraction.py`
+- `colab_data_split.py`
+
+---
+
+#### 📦 Pretrained Model Weights
+
+Download pretrained model checkpoints from the following Google Drive links:
+
+| Model | Download Link |
+|---|---|
+| 🎙️ Speech-Only Model | [Download](https://drive.google.com/file/d/1ljNiWmN_klH4EFLnPHLLsIVzHvRtrQaA/view?usp=drive_link) |
+| 📝 Text-Only Model | [Download](https://drive.google.com/file/d/1CCUGR08Ozg_9bhWtyu4Ib6qasQiJ1nO8/view?usp=drive_link) |
+| 🔀 Multimodal Fusion Model | [Download](https://drive.google.com/file/d/1oP1F4-bpNNY3zwPs2Q1W7l_kNx5ptRvT/view?usp=drive_link) |
+
+All checkpoints are also available together in a single Drive folder:
+
+- https://drive.google.com/drive/folders/1SWWakvZYEBRarcdlSpeEHXrHE2zwQO8N?usp=drive_link
+
+After downloading, place the pretrained weights inside the root project directory:
+
+```bash
+IIIT_PROJECT/
+├── best_speech_model.pth
+├── best_text_model.pth
+├── best_fusion_model.pth
+```
+
+## 📁 Project Structure
+
+```bash
+IIIT_PROJECT/
+│
+├── assets/
+│
+├── Data_split/
+│   ├── colab_data_extraction.py
+│   ├── colab_data_split.py
+│   ├── train_split.csv
+│   └── test_split.csv
+│
+├── project/
+│   ├── models/
+│   │   ├── speech_pipeline/
+│   │   │   ├── train.py
+│   │   │   └── test.py
+│   │   │
+│   │   ├── text_pipeline/
+│   │   │   ├── train.py
+│   │   │   └── test.py
+│   │   │
+│   │   └── fusion_pipeline/
+│   │       ├── train.py
+│   │       └── test.py
+│   │
+│   ├── Results/
+│   │   ├── plots/
+│   │   │   ├── Speech_model/
+│   │   │   ├── Text_model/
+│   │   │   └── Fusion_model/
+│   │   │
+│   │   ├── speech_accuracy_table.csv
+│   │   ├── text_accuracy_table.csv
+│   │   └── fusion_accuracy_table.csv
+│   │
+│   └── requirements.txt
+│
+├── TESS_dataset/
+│   ├── TESS Toronto emotional speech set data/
+│   └── archive.zip
+│
+├── best_speech_model.pth
+├── best_text_model.pth
+├── best_fusion_model.pth
+│
+├── .gitignore
+└── README.md
+```
+
+### 📖 File & Folder Explanation
+
+| File / Folder | Description |
+|---|---|
+| `assets/` | Contains README visualization assets. |
+| `Data_split/` | Contains dataset preprocessing scripts and generated train-test split CSV files. |
+| `↳ colab_data_extraction.py` | Extracts and prepares the original TESS dataset from the compressed archive. |
+| `↳ colab_data_split.py` | Generates structured training and testing CSV splits from the extracted dataset. |
+| `↳ train_split.csv` | Training metadata file containing audio paths, text transcripts, and encoded emotion labels. |
+| `↳ test_split.csv` | Testing metadata file containing audio paths, text transcripts, and encoded emotion labels. |
+| `project/models/` | Contains all Speech-Only, Text-Only, and Fusion model training/testing pipelines. |
+| `↳ speech_pipeline/` | Training and evaluation pipeline for the Speech-Only architecture. |
+| `↳ text_pipeline/` | Training and evaluation pipeline for the Text-Only architecture. |
+| `↳ fusion_pipeline/` | Training and evaluation pipeline for the Multimodal Fusion architecture. |
+| `↳ train.py` | Trains the corresponding model architecture. |
+| `↳ test.py` | Evaluates the trained model and generates performance metrics and visualizations. |
+| `project/Results/` | Stores evaluation metrics, accuracy tables, and generated experimental outputs. |
+| `↳ plots/` | Contains learning curves, confusion matrices, and t-SNE visualizations for all models. |
+| `TESS_dataset/` | Contains both compressed and extracted versions of the TESS emotional speech dataset. |
+| `↳ archive.zip` | Original compressed TESS dataset archive used during preprocessing and extraction. |
+| `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech audio samples. |
+| `best_speech_model.pth` | Pretrained Speech-Only model checkpoint. |
+| `best_text_model.pth` | Pretrained Text-Only model checkpoint. |
+| `best_fusion_model.pth` | Pretrained Multimodal Fusion model checkpoint. |
+| `requirements.txt` | Lists all required Python libraries and dependencies. |
+| `.gitignore` | Prevents large datasets, model weights, and unnecessary system files from being tracked by Git. |
+| `README.md` | Project documentation, architecture explanations, usage instructions, and experimental results. |
+
+
+### ⬇️ 4. Clone Repository
+
+Clone the project repository from GitHub:
+
+```bash
+git clone https://github.com/vishakhmv/IIIT_project.git
+```
+
+Move into the project directory:
+
+```bash
+cd IIIT_project
+```
+
+---
+
+#### 📂 After Cloning
+
+After cloning the repository:
+
+1. Download pretrained model checkpoints
+2. Download and extract the TESS dataset
+3. Place the dataset and model weights in the correct directory structure
+
+The final directory structure should match the structure shown in the Project Structure section.
+
+---
+
+#### ⚠️ Important Note
+
+The GitHub repository does **not** include:
+
+- pretrained `.pth` model checkpoints
+- the TESS dataset
+- extracted audio files
+
+These large files are intentionally excluded using `.gitignore`.
+
+Please download them separately using the links provided in the **Download Requirements** section before running the project.
