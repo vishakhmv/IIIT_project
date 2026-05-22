@@ -2670,3 +2670,15 @@ Each testing pipeline produces:
 | `tsne.png` | Latent feature-space clustering visualization |
 
 ---
+
+#### 🎥 Demo Evaluation Videos
+
+Example testing demonstrations for all three architectures:
+
+| Model | Demo Video |
+|---|---|
+| 🎙️ Speech-Only Model | [Watch Demo](https://drive.google.com/file/d/1tZi4PT88HBX49JdGuUb3rYcLSrYv4jw0/view?usp=drive_link) |
+| 📝 Text-Only Model | [Watch Demo](https://drive.google.com/file/d/1xAPC5XahMvinL3LZV_i0gWLLCRryUoNz/view?usp=drive_link) |
+| 🔀 Multimodal Fusion Model | [Watch Demo](https://drive.google.com/file/d/1tfAeqwg5DVqTktuf20PT5eNYkv0PKlv0/view?usp=drive_link) |
+
+---
