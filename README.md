@@ -2585,7 +2585,7 @@ The testing pipelines evaluate pretrained models on unseen test samples and auto
 #### 🎙️ Test Speech-Only Model
 
 ```bash
-python project/models/speech_pipeline/test.py
+python -B project/models/speech_pipeline/test.py
 ```
 
 ---
@@ -2593,7 +2593,7 @@ python project/models/speech_pipeline/test.py
 #### 📝 Test Text-Only Model
 
 ```bash
-python project/models/text_pipeline/test.py
+python -B project/models/text_pipeline/test.py
 ```
 
 ---
@@ -2601,8 +2601,12 @@ python project/models/text_pipeline/test.py
 #### 🔀 Test Multimodal Fusion Model
 
 ```bash
-python project/models/fusion_pipeline/test.py
+python -B project/models/fusion_pipeline/test.py
 ```
+
+---
+
+> **💡 Note on the `-B` flag:** We use the `python -B` command to prevent Python from generating `__pycache__` folders, keeping the project directory clean during evaluation.
 
 ---
 
