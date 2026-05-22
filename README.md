@@ -14,6 +14,33 @@ The repository contains three independent deep learning pipelines:
 
 The project also includes **representation learning analysis, t-SNE visualization, confusion matrices, and error analysis** to study the effectiveness of multimodal learning.
 
+---
+
+## 📑 Table of Contents
+
+- [🧠 Model Overview](#model-overview)
+- [📊 Dataset](#dataset)
+- [📦 Data Extraction & Splitting](#data-extraction-and-splitting)
+
+- [🧠 Models](#models)
+  - [🎙️ 1. Speech-Only Model](#speech-only-model)
+  - [📝 2. Text-Only Model](#text-only-model)
+  - [🔀 3. Multimodal Fusion Model](#fusion-model)
+
+- [📈 Final Results Summary](#evaluation-summary)
+
+- [⚙️ Installation & Usage](#installation-and-usage)
+  - [📥 1. Download Requirements](#download-requirements)
+  - [📁 2. Project Structure](#project-structure)
+  - [📖 3. File & Folder Explanation](#file-and-folder-explanation)
+  - [⬇️ 4. Clone Repository](#clone-repo)
+  - [🛠️ 7. Install Dependencies](#install-dependencies)
+  - [🚀 9. Run Training](#training)
+  - [🧪 10. Run Testing](#testing)
+
+---
+
+<a id="model-overview"></a>
 ## 🧠 Model Overview
 
 | Model | Input Modality | Main Backbone |
@@ -22,6 +49,7 @@ The project also includes **representation learning analysis, t-SNE visualizatio
 | Text-Only | Text | DistilBERT |
 | Multimodal Fusion | Audio + Text | HuBERT + MFCC + BiLSTM + DistilBERT |
 
+<a id="dataset"></a>
 ## 📊 Dataset
 
 The models are trained and evaluated on the **TESS (Toronto Emotional Speech Set)** dataset.
@@ -59,7 +87,7 @@ The dataset uses linguistically neutral carrier phrases such as:
 
 All emotional categories contain the same spoken sentences, ensuring that emotional variation primarily comes from vocal expression rather than changes in textual content.
 
-
+<a id="data-extraction-and-splitting"></a>
 ## 📦 Data Extraction & Splitting
 
 The TESS dataset was extracted and processed using custom preprocessing scripts developed in Google Colab.
@@ -70,6 +98,7 @@ The TESS dataset was extracted and processed using custom preprocessing scripts 
 
 ---
 
+<a id="data-extraction"></a>
 ### 🔓 Data Extraction
 
 The compressed TESS dataset archive was extracted from Google Drive and verified before preprocessing.
@@ -89,6 +118,8 @@ The compressed TESS dataset archive was extracted from Google Drive and verified
 
 
 ```
+
+<a id="data-splitting"></a>
 ### ✂️ Data Splitting
 
 After dataset extraction, the complete TESS dataset was recursively processed to generate structured metadata for multimodal training and testing.
@@ -229,10 +260,14 @@ The final preprocessing pipeline produced a clean and reproducible multimodal da
 - Multimodal Fusion Training
 
 
+<a id="models"></a>
 ## 🧠 Models
 
 This project consists of three independent deep learning pipelines:
 
+---
+
+<a id="speech-only-model"></a>
 ### 🎙️ 1. Speech-Only Model
 
 The Speech-Only pipeline predicts emotions directly from raw audio signals by learning acoustic speech features such as tone, pitch, energy, etc.
@@ -804,7 +839,10 @@ The Speech-Only evaluation pipeline demonstrates that the architecture successfu
 
 The near-perfect classification metrics and clearly separated latent clusters indicate strong generalization capability on unseen emotional speech samples.
 
-### 📝 Text-Only Model
+---
+
+<a id="text-only-model"></a>
+### 📝 2. Text-Only Model
 
 The Text-Only pipeline predicts emotions using text.
 
@@ -1349,7 +1387,8 @@ for effective emotional understanding.
 
 ---
 
-### 🔀 Multimodal Fusion Model
+<a id="fusion-model"></a>
+### 🔀 3. Multimodal Fusion Model
 
 The Multimodal Fusion pipeline predicts emotions by jointly learning from both speech and textual representations.
 
@@ -2202,6 +2241,7 @@ By integrating:
 
 the architecture achieves highly robust multimodal emotion recognition performance with strong generalization capability on unseen emotional speech samples.
 
+<a id="evaluation-summary"></a>
 ## 📈 Final Results Summary
 
 The comparative evaluation of all three architectures demonstrates the importance of acoustic speech information for robust emotion recognition on the TESS dataset.
@@ -2244,9 +2284,10 @@ This project demonstrates that acoustic speech information plays a dominant role
 
 The experimental results further show that multimodal learning can effectively integrate speech and language representations to build highly accurate and robust emotion recognition systems.
 
-
+<a id="installation-and-usage"></a>
 ## ⚙️ Installation & Usage
 
+<a id="download-requirements"></a>
 ### 📥 1. Download Requirements
 
 Before running the project, download the required dataset and pretrained model checkpoints.
@@ -2347,7 +2388,8 @@ IIIT_PROJECT/
 
 ---
 
-## 📁 Project Structure
+<a id="project-structure"></a>
+### 📁 2. Project Structure
 
 ```bash
 IIIT_PROJECT/
@@ -2399,7 +2441,8 @@ IIIT_PROJECT/
 ```
 ---
 
-### 📖 File & Folder Explanation
+<a id="file-and-folder-explanation"></a>
+### 📖 3. File & Folder Explanation
 
 | File / Folder | Description |
 |---|---|
@@ -2429,6 +2472,7 @@ IIIT_PROJECT/
 
 ---
 
+<a id="clone-repo"></a>
 ### ⬇️ 4. Clone Repository
 
 Clone the project repository from GitHub:
@@ -2445,13 +2489,10 @@ cd IIIT_project
 
 ---
 
-#### 📂 After Cloning
+<a id="after-clonning"></a>
+#### 📂 6. After Cloning
 
-After cloning the repository:
-
-1. Download pretrained model checkpoints
-2. Download and extract the TESS dataset
-3. Place the dataset and model weights in the correct directory structure
+After cloning the repository, place the dataset and model weights in the correct directory structure
 
 The final directory structure should match the structure shown in the **Project Structure** section.
 
@@ -2471,7 +2512,8 @@ Please download them separately using the links provided in the **Download Requi
 
 ---
 
-### 🛠️ 5. Install Dependencies
+<a id="install-dependencies"></a>
+### 🛠️ 7. Install Dependencies
 
 Install all required Python libraries using:
 
@@ -2510,7 +2552,8 @@ Ensure that your system has an active internet connection during the initial set
 
 ---
 
-### 🚀 6. Run Training
+<a id="training"></a>
+### 🚀 9. Run Training
 
 > **Optional:**  
 > This step is only required if you want to retrain the models from scratch.
@@ -2572,7 +2615,8 @@ IIIT_project/
 ```
 ---
 
-### 🧪 7. Run Testing
+<a id="testing"></a>
+### 🧪 10. Run Testing
 
 The testing pipelines evaluate pretrained models on unseen test samples and automatically generate:
 
