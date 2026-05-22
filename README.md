@@ -34,9 +34,10 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [📁 2. Project Structure](#project-structure)
   - [📖 3. File & Folder Explanation](#file-and-folder-explanation)
   - [⬇️ 4. Clone Repository](#clone-repo)
-  - [🛠️ 7. Install Dependencies](#install-dependencies)
-  - [🚀 9. Run Training](#training)
-  - [🧪 10. Run Testing](#testing)
+  - [📂 5. After Cloning](#after-cloning)
+  - [🛠️ 6. Install Dependencies](#install-dependencies)
+  - [🚀 7. Run Training](#training)
+  - [🧪 8. Run Testing](#testing)
 
 ---
 
@@ -2489,8 +2490,8 @@ cd IIIT_project
 
 ---
 
-<a id="after-clonning"></a>
-#### 📂 6. After Cloning
+<a id="after-cloning"></a>
+#### 📂 5. After Cloning
 
 After cloning the repository, place the dataset and model weights in the correct directory structure
 
@@ -2513,7 +2514,7 @@ Please download them separately using the links provided in the **Download Requi
 ---
 
 <a id="install-dependencies"></a>
-### 🛠️ 7. Install Dependencies
+### 🛠️ 6. Install Dependencies
 
 Install all required Python libraries using:
 
@@ -2553,7 +2554,7 @@ Ensure that your system has an active internet connection during the initial set
 ---
 
 <a id="training"></a>
-### 🚀 9. Run Training
+### 🚀 7. Run Training
 
 > **Optional:**  
 > This step is only required if you want to retrain the models from scratch.
@@ -2616,7 +2617,7 @@ IIIT_project/
 ---
 
 <a id="testing"></a>
-### 🧪 10. Run Testing
+### 🧪 8. Run Testing
 
 The testing pipelines evaluate pretrained models on unseen test samples and automatically generate:
 
