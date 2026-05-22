@@ -2345,6 +2345,8 @@ IIIT_PROJECT/
 ├── best_fusion_model.pth
 ```
 
+---
+
 ## 📁 Project Structure
 
 ```bash
@@ -2395,6 +2397,7 @@ IIIT_PROJECT/
 ├── .gitignore
 └── README.md
 ```
+---
 
 ### 📖 File & Folder Explanation
 
@@ -2424,6 +2427,7 @@ IIIT_PROJECT/
 | `.gitignore` | Prevents large datasets, model weights, and unnecessary system files from being tracked by Git. |
 | `README.md` | Project documentation, architecture explanations, usage instructions, and experimental results. |
 
+---
 
 ### ⬇️ 4. Clone Repository
 
@@ -2465,6 +2469,7 @@ These large files are intentionally excluded using `.gitignore`.
 
 Please download them separately using the links provided in the **Download Requirements** section before running the project.
 
+---
 
 ### 🛠️ 5. Install Dependencies
 
@@ -2503,6 +2508,7 @@ The first execution may automatically download pretrained Hugging Face models in
 
 Ensure that your system has an active internet connection during the initial setup.
 
+---
 
 ### 🚀 6. Run Training
 
@@ -2564,3 +2570,99 @@ IIIT_project/
             ├── Text_model/
             └── Fusion_model/
 ```
+---
+
+### 🧪 7. Run Testing
+
+The testing pipelines evaluate pretrained models on unseen test samples and automatically generate:
+
+- classification accuracy tables
+- confusion matrices
+- t-SNE latent space visualizations
+
+---
+
+#### 🎙️ Test Speech-Only Model
+
+```bash
+python project/models/speech_pipeline/test.py
+```
+
+---
+
+#### 📝 Test Text-Only Model
+
+```bash
+python project/models/text_pipeline/test.py
+```
+
+---
+
+#### 🔀 Test Multimodal Fusion Model
+
+```bash
+python project/models/fusion_pipeline/test.py
+```
+
+---
+
+#### 📌 Testing Outputs
+
+Testing automatically generates:
+
+- classification metric tables (`.csv`)
+- confusion matrices
+- t-SNE visualizations
+
+---
+
+##### 📊 Accuracy Tables
+
+Generated accuracy tables are stored in:
+
+```bash
+IIIT_project/
+└── project/
+    └── Results/
+        ├── speech_accuracy_table.csv
+        ├── text_accuracy_table.csv
+        └── fusion_accuracy_table.csv
+```
+
+---
+
+##### 🔥 Confusion Matrices & t-SNE Visualizations
+
+Generated plots are stored in:
+
+```bash
+IIIT_project/
+└── project/
+    └── Results/
+        └── plots/
+            ├── Speech_model/
+            │   ├── confusion_matrix.png
+            │   └── tsne.png
+            │
+            ├── Text_model/
+            │   ├── confusion_matrix.png
+            │   └── tsne.png
+            │
+            └── Fusion_model/
+                ├── confusion_matrix.png
+                └── tsne.png
+```
+
+---
+
+#### 📈 Generated Evaluation Artifacts
+
+Each testing pipeline produces:
+
+| Artifact | Description |
+|---|---|
+| `accuracy_table.csv` | Precision, Recall, F1-Score, and Accuracy metrics |
+| `confusion_matrix.png` | Class-wise prediction performance visualization |
+| `tsne.png` | Latent feature-space clustering visualization |
+
+---
