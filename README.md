@@ -2476,7 +2476,7 @@ Please download them separately using the links provided in the **Download Requi
 Install all required Python libraries using:
 
 ```bash
-pip install -r requirements.txt
+pip install -r project/requirements.txt
 ```
 
 ---
