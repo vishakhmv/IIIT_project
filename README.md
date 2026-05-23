@@ -1170,7 +1170,7 @@ This behavior occurs because the TESS dataset uses nearly identical carrier phra
 
 ---
 
-#### 📊 Testing & Evaluation Pipeline
+#### 📊 c. Testing & Evaluation Pipeline
 
 The Text-Only evaluation pipeline measures the model’s ability to generalize on unseen textual inputs using quantitative metrics and latent space visualization techniques.
 
