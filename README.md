@@ -13,6 +13,7 @@ The repository contains three independent deep learning pipelines:
 - 🔀 **Multimodal Fusion Model** — combines both speech and text representations to achieve stronger and more robust emotion recognition.
 
 The project also includes **representation learning analysis, t-SNE visualization, confusion matrices, and error analysis** to study the effectiveness of multimodal learning.
+📄 **Read the full Technical Report:** [Report.pdf](./Report.pdf)
 
 ---
 
@@ -2438,7 +2439,9 @@ IIIT_PROJECT/
 ├── best_fusion_model.pth
 │
 ├── .gitignore
-└── README.md
+├── README.md
+└── Report.pdf
+
 ```
 ---
 
@@ -2470,6 +2473,7 @@ IIIT_PROJECT/
 | `requirements.txt` | Lists all required Python libraries and dependencies. |
 | `.gitignore` | Prevents large datasets, model weights, and unnecessary system files from being tracked by Git. |
 | `README.md` | Project documentation, architecture explanations, usage instructions, and experimental results. |
+| `Report.pdf` | Comprehensive technical report detailing architecture decisions, experiments, failure case analysis, and latent space observations, etc. |
 
 ---
 
