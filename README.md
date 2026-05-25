@@ -2541,7 +2541,7 @@ pip install -r project/requirements.txt
 
 ---
 
-#### 📦 Main Dependencies
+#### 📦 Dependencies
 
 The project primarily uses the following libraries and frameworks:
 
@@ -2758,7 +2758,7 @@ The web interface allows real-time emotion prediction using the pretrained Speec
 
 ---
 
-#### 📦 Install Web Dependencies
+#### 🛠️ Install Web Dependencies
 
 The web application uses a separate lightweight dependency configuration to keep the inference environment isolated from the training environment.
 
@@ -2773,6 +2773,22 @@ Install all required web application dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+---
+
+#### 📦 Web Dependencies
+
+To maintain a lightweight inference environment independent of the training pipeline, the web application uses a separate `requirements.txt` file. The backend server relies on the following packages:
+
+| Library | Version Requirement | Purpose |
+| :--- | :--- | :--- |
+| `torch` | `>=2.0.0` | Deep learning framework used for loading pretrained model weights and performing inference |
+| `transformers` | `>=4.35.0` | Provides pretrained transformer architectures including DistilBERT and HuBERT |
+| `flask` | `>=3.0.0` | Lightweight backend web framework used to serve the inference application |
+| `librosa` | `>=0.10.0` | Audio processing library used for waveform loading and MFCC feature extraction |
+| `soundfile` | `>=0.12.1` | Handles decoding and processing of uploaded audio files |
+| `numpy` | `>=1.24.0` | Numerical computation library used for tensor preparation and preprocessing |
+| `Flask-CORS` | `>=4.0.0` | Enables secure communication between the frontend interface and backend server |
 
 ---
 
