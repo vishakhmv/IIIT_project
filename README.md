@@ -2749,7 +2749,10 @@ Example testing demonstrations for all three architectures:
 
 ### 🌐 9. Run Web Application
 
-The project includes a fully functional and responsive web application built using a Python (Flask) backend with an HTML/CSS/JavaScript frontend.
+The project includes a fully functional and responsive web application named **Bhavora AI**, built using a Python (Flask) backend with an HTML/CSS/JavaScript frontend.
+
+#### ✨ The Meaning of "Bhavora"
+The name **Bhavora** is inspired by the Sanskrit word ***“Bhava”*** (भाव), meaning emotion or feeling, combined with the word ***“Aura”*** representing an emotional presence or atmosphere. Together, Bhavora symbolizes an “Emotional Aura,” reflecting the system’s ability to recognize human emotions from subtle patterns in speech and text.
 
 The web interface allows real-time emotion prediction using the pretrained Speech-Only, Text-Only, and Multimodal Fusion architectures through an interactive dashboard.
 
