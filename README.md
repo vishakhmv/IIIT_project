@@ -39,6 +39,7 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [🛠️ 6. Install Dependencies](#install-dependencies)
   - [🚀 7. Run Training](#training)
   - [🧪 8. Run Testing](#testing)
+  - [🌐 9. Run Web Application](#web-app)
 
 ---
 
@@ -2394,7 +2395,7 @@ IIIT_PROJECT/
 ### 📁 2. Project Structure
 
 ```bash
-IIIT_PROJECT/
+IIIT_project/
 │
 ├── assets/
 │
@@ -2434,6 +2435,13 @@ IIIT_PROJECT/
 │   ├── TESS Toronto emotional speech set data/
 │   └── archive.zip
 │
+├── Web/
+│   ├── app.py
+│   ├── index.html
+│   ├── style.css
+│   ├── script.js
+│   └── requirements.txt
+│
 ├── best_speech_model.pth
 ├── best_text_model.pth
 ├── best_fusion_model.pth
@@ -2450,31 +2458,36 @@ IIIT_PROJECT/
 
 | File / Folder | Description |
 |---|---|
-| `assets/` | Contains README visualization assets. |
+| `assets/` | Contains README visualization assets, architecture diagrams, learning curves, confusion matrices, and t-SNE plots. |
 | `Data_split/` | Contains dataset preprocessing scripts and generated train-test split CSV files. |
 | `↳ colab_data_extraction.py` | Extracts and prepares the original TESS dataset from the compressed archive. |
 | `↳ colab_data_split.py` | Generates structured training and testing CSV splits from the extracted dataset. |
-| `↳ train_split.csv` | Training metadata file containing audio paths, text transcripts, and encoded emotion labels. |
-| `↳ test_split.csv` | Testing metadata file containing audio paths, text transcripts, and encoded emotion labels. |
-| `project/models/` | Contains all Speech-Only, Text-Only, and Fusion model training/testing pipelines. |
+| `↳ train_split.csv` | Training metadata file containing audio paths, generated transcripts, and encoded emotion labels. |
+| `↳ test_split.csv` | Testing metadata file containing audio paths, generated transcripts, and encoded emotion labels. |
+| `project/models/` | Contains all Speech-Only, Text-Only, and Multimodal Fusion training and evaluation pipelines. |
 | `↳ speech_pipeline/` | Training and evaluation pipeline for the Speech-Only architecture. |
 | `↳ text_pipeline/` | Training and evaluation pipeline for the Text-Only architecture. |
 | `↳ fusion_pipeline/` | Training and evaluation pipeline for the Multimodal Fusion architecture. |
-| `↳ train.py` | Trains the corresponding model architecture. |
-| `↳ test.py` | Evaluates the trained model and generates performance metrics and visualizations. |
-| `project/Results/` | Stores evaluation metrics, accuracy tables, and generated experimental outputs. |
-| `↳ plots/` | Contains learning curves, confusion matrices, and t-SNE visualizations for all models. |
+| `↳ train.py` | Trains the corresponding architecture. |
+| `↳ test.py` | Evaluates the trained model and generates metrics and visualizations. |
+| `project/Results/` | Stores generated evaluation metrics, plots, and experimental outputs. |
+| `↳ plots/` | Contains confusion matrices, learning curves, and t-SNE visualizations for all models. |
+| `project/requirements.txt` | Python dependencies required for model training, evaluation, and visualization pipelines. |
+| `Web/` | Web-based interface for real-time multimodal emotion recognition using the trained Speech, Text, and Fusion models. |
+| `↳ app.py` | Flask backend responsible for loading trained models and performing local emotion inference. |
+| `↳ index.html` | Main frontend webpage for user interaction and emotion prediction. |
+| `↳ style.css` | Frontend styling and responsive user interface design. |
+| `↳ script.js` | Frontend interaction logic and communication with the Flask backend. |
+| `↳ requirements.txt` | Python dependencies required for running the web application locally. |
 | `TESS_dataset/` | Contains both compressed and extracted versions of the TESS emotional speech dataset. |
-| `↳ archive.zip` | Original compressed TESS dataset archive used during preprocessing and extraction. |
-| `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech audio samples. |
+| `↳ archive.zip` | Original compressed TESS dataset archive used during preprocessing. |
+| `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech samples. |
 | `best_speech_model.pth` | Pretrained Speech-Only model checkpoint. |
 | `best_text_model.pth` | Pretrained Text-Only model checkpoint. |
 | `best_fusion_model.pth` | Pretrained Multimodal Fusion model checkpoint. |
-| `requirements.txt` | Lists all required Python libraries and dependencies. |
-| `.gitignore` | Prevents large datasets, model weights, and unnecessary system files from being tracked by Git. |
-| `README.md` | Project documentation, architecture explanations, usage instructions, and experimental results. |
-| `Report.pdf` | Comprehensive technical report detailing architecture decisions, experiments, failure case analysis, and latent space observations, etc. |
-
+| `.gitignore` | Prevents large datasets, model checkpoints, cache files, and system files from being tracked by Git. |
+| `README.md` | Project documentation, architecture explanations, setup instructions, experimental results, and workflow details. |
+| `Report.pdf` | Complete technical report containing architecture design, experiments, analysis, observations, and conclusions. |
 ---
 
 <a id="clone-repo"></a>
@@ -2729,5 +2742,92 @@ Example testing demonstrations for all three architectures:
 | 🎙️ Speech-Only Model | [Watch Demo](https://drive.google.com/file/d/1tZi4PT88HBX49JdGuUb3rYcLSrYv4jw0/view?usp=drive_link) |
 | 📝 Text-Only Model | [Watch Demo](https://drive.google.com/file/d/1xAPC5XahMvinL3LZV_i0gWLLCRryUoNz/view?usp=drive_link) |
 | 🔀 Multimodal Fusion Model | [Watch Demo](https://drive.google.com/file/d/1tfAeqwg5DVqTktuf20PT5eNYkv0PKlv0/view?usp=drive_link) |
+
+---
+
+<a id="web-app"></a>
+
+### 🌐 9. Run Web Application
+
+The project includes a fully functional and responsive web application built using a Python (Flask) backend with an HTML/CSS/JavaScript frontend.
+
+The web interface allows real-time emotion prediction using the pretrained Speech-Only, Text-Only, and Multimodal Fusion architectures through an interactive dashboard.
+
+---
+
+#### 📦 Install Web Dependencies
+
+The web application uses a separate lightweight dependency configuration to keep the inference environment isolated from the training environment.
+
+Move into the `Web/` directory:
+
+```bash
+cd Web
+```
+
+Install all required web application dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+#### 🚀 Start Flask Backend
+
+Launch the local Flask development server:
+
+```bash
+python app.py
+```
+
+The backend server will automatically initialize on your local machine.
+
+---
+
+#### 🌍 Open the Web Interface
+
+Once the Flask server starts successfully, open your web browser and navigate to:
+
+```text
+http://127.0.0.1:5000
+```
+
+---
+
+#### 🎭 Supported Prediction Modes
+
+The web dashboard supports real-time emotion prediction for all three architectures:
+
+| Mode | Description |
+|---|---|
+| 🎙️ Speech-Only | Upload `.wav` or `.flac` audio files for speech emotion recognition |
+| 📝 Text-Only | Enter text input for semantic emotion prediction |
+| 🔀 Multimodal Fusion | Provide both speech and text inputs for multimodal emotion recognition |
+
+---
+
+#### 🖥️ Web Interface Preview
+
+The web application includes:
+
+- Responsive user interface
+- Real-time prediction dashboard
+- Dark/Light theme toggle
+- Probability visualization
+- Multimodal prediction support
+
+<p align="center">
+  <img src="assets/web-light.png" width="45%">
+  <img src="assets/web-dark.png" width="45%">
+</p>
+
+---
+
+#### 🎥 Web Application Demonstration
+
+Watch the real-time emotion recognition system in action:
+
+- [Watch Web Application Demo](LINK)
 
 ---
