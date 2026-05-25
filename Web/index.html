@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bhavora AI</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <span class="brand-name"
+        >Bhavora <span class="brand-accent">AI</span></span
+      >
+      <button class="theme-btn" id="themeToggle">☀️</button>
+    </header>
+
+    <div class="mobile-tabs">
+      <button class="mobile-tab active" data-tab="speech">🎙️ Speech</button>
+      <button class="mobile-tab" data-tab="text">📝 Text</button>
+      <button class="mobile-tab" data-tab="fusion">🔀 Fusion</button>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-label">Models</div>
+        <button class="tab active" data-tab="speech">
+          <span class="tab-icon">🎙️</span> Speech
+        </button>
+        <button class="tab" data-tab="text">
+          <span class="tab-icon">📝</span> Text
+        </button>
+        <button class="tab" data-tab="fusion">
+          <span class="tab-icon">🔀</span> Speech + Text
+        </button>
+      </aside>
+
+      <main class="content">
+        <div class="hero">
+          <h1 class="hero-title">🎭 Emotion Recognition</h1>
+          <p class="hero-sub">
+            Understand emotions from speech, text, or both — powered by
+            multimodal deep learning on the TESS dataset.
+          </p>
+        </div>
+
+        <section class="panel active" id="panel-speech">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">🎙️</span>
+              <div>
+                <h2 class="card-title">Speech Emotion</h2>
+                <p class="card-desc">
+                  Upload an audio file to detect emotion from speech signals
+                  using HuBERT + MFCC + BiLSTM.
+                </p>
+              </div>
+            </div>
+
+            <div class="upload-area" id="speechDrop">
+              <span class="upload-icon">🎵</span>
+              <p class="upload-label">
+                Drop audio file here or click to browse
+              </p>
+              <p class="upload-hint">Supports WAV, FLAC</p>
+              <input
+                type="file"
+                id="speechFile"
+                accept="audio/*"
+                class="hidden-input"
+              />
+            </div>
+
+            <div class="file-info hidden" id="speechFileInfo">
+              <span class="file-icon">🎧</span>
+              <span id="speechFileName">No file selected</span>
+              <button class="remove-btn" id="speechRemove">✕</button>
+            </div>
+
+            <button class="analyze-btn" id="speechAnalyze">
+              Analyze Emotion 🔍
+            </button>
+
+            <div class="result-box" id="speechResult">
+              <div class="result-empty">
+                <span class="result-empty-icon">📊</span>
+                <p>Results will appear here after analysis</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3>⚙️ How it works</h3>
+            <p>
+              The speech model uses <strong>HuBERT</strong> contextual
+              embeddings combined with <strong>MFCC</strong> acoustic features
+              and a <strong>BiLSTM</strong> temporal network to classify
+              emotions across 7 emotion classes.
+            </p>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-text">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">📝</span>
+              <div>
+                <h2 class="card-title">Text Emotion</h2>
+                <p class="card-desc">
+                  Enter a text phrase to analyze emotion from language semantics
+                  using DistilBERT.
+                </p>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="textInput">Enter text</label>
+              <textarea
+                id="textInput"
+                class="text-input"
+                placeholder="e.g. say the word back, I am very happy today..."
+                rows="5"
+              ></textarea>
+            </div>
+
+            <button class="analyze-btn" id="textAnalyze">
+              Analyze Emotion 🔍
+            </button>
+
+            <div class="result-box" id="textResult">
+              <div class="result-empty">
+                <span class="result-empty-icon">📊</span>
+                <p>Results will appear here after analysis</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3>⚙️ How it works</h3>
+            <p>
+              The text model uses <strong>DistilBERT</strong> transformer
+              embeddings to extract semantic meaning from text. Note: Text-only
+              analysis is less effective here.
+            </p>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-fusion">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-icon">🔀</span>
+              <div>
+                <h2 class="card-title">Multimodal Fusion</h2>
+                <p class="card-desc">
+                  Combine speech and text for the most accurate emotion
+                  prediction.
+                </p>
+              </div>
+            </div>
+
+            <div class="upload-area" id="fusionDrop">
+              <span class="upload-icon">🎵</span>
+              <p class="upload-label">
+                Drop audio file here or click to browse
+              </p>
+              <p class="upload-hint">Supports WAV, FLAC</p>
+              <input
+                type="file"
+                id="fusionFile"
+                accept="audio/*"
+                class="hidden-input"
+              />
+            </div>
+
+            <div class="file-info hidden" id="fusionFileInfo">
+              <span class="file-icon">🎧</span>
+              <span id="fusionFileName">No file selected</span>
+              <button class="remove-btn" id="fusionRemove">✕</button>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="fusionText"
+                >Enter transcript text</label
+              >
+              <textarea
+                id="fusionText"
+                class="text-input"
+                placeholder="e.g. say the word back..."
+                rows="4"
+              ></textarea>
+            </div>
+
+            <button class="analyze-btn" id="fusionAnalyze">
+              Analyze Emotion 🔍
+            </button>
+
+            <div class="result-box" id="fusionResult">
+              <div class="result-empty">
+                <span class="result-empty-icon">📊</span>
+                <p>Results will appear here after analysis</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3>⚙️ How it works</h3>
+            <p>
+              The fusion model combines
+              <strong>HuBERT + MFCC + BiLSTM</strong> speech features with
+              <strong>DistilBERT</strong> text embeddings into a unified
+              multimodal representation. Even when text alone fails, fusing it
+              with speech improves stability.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="section-title">🎭 Detectable Emotions</h2>
+          <div class="emotions-grid">
+            <div class="emotion-chip">😠 Angry</div>
+            <div class="emotion-chip">🤢 Disgust</div>
+            <div class="emotion-chip">😨 Fear</div>
+            <div class="emotion-chip">😊 Happy</div>
+            <div class="emotion-chip">😐 Neutral</div>
+            <div class="emotion-chip">😲 Pleasant Surprise</div>
+            <div class="emotion-chip">😢 Sad</div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <p>Bhavora AI &nbsp;·&nbsp; Vishakh M V</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
