@@ -35,7 +35,7 @@ def test_pipeline():
     base_audio_dir = os.path.normpath(os.path.join(script_dir, '../../../TESS_dataset/TESS Toronto emotional speech set data'))
     pth_load_path = os.path.normpath(os.path.join(script_dir, '../../../best_speech_model.pth'))
     
-    csv_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/speech_accuracy_table.csv'))
+    csv_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/speech_classification_report.csv'))
     matrix_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/plots/Speech_model/confusion_matrix.png'))
     tsne_out_path = os.path.normpath(os.path.join(script_dir, '../../Results/plots/Speech_model/tsne.png'))
     
@@ -96,11 +96,21 @@ def test_pipeline():
     report_dict = classification_report(all_targets, all_preds, target_names=target_names, output_dict=True, zero_division=0)
     df_metrics = pd.DataFrame(report_dict).transpose()
 
-    df_metrics.index.name = 'emotion'
+    if 'accuracy' in df_metrics.index:
+        df_metrics = df_metrics.drop(index='accuracy')
+
+    df_metrics.index.name = None
+
+    df_metrics = df_metrics.round(4)
+
+    df_metrics['support'] = df_metrics['support'].astype(int)
+
+    df_metrics.index = [str(label).title() for label in df_metrics.index]
     
     os.makedirs(os.path.dirname(csv_out_path), exist_ok=True)
     df_metrics.to_csv(csv_out_path, index=True)
-    print(f"\n[SUCCESS] Speech variance accuracy table successfully saved to: {csv_out_path}")
+
+    print(f"\n[SUCCESS] Speech classification report successfully saved to: {csv_out_path}")
     
     # Generate Seaborn heatmap confusion matrix in standard Blue
     cm = confusion_matrix(all_targets, all_preds)

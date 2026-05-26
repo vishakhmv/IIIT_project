@@ -1,0 +1,10 @@
+,precision,recall,f1-score,support
+Angry,0.0,0.0,0.0,80
+Disgust,0.0,0.0,0.0,80
+Fear,0.0,0.0,0.0,80
+Happy,0.0,0.0,0.0,80
+Neutral,0.0,0.0,0.0,80
+Pleasant Surprise,0.1429,1.0,0.25,80
+Sad,0.0,0.0,0.0,80
+Macro Avg,0.0204,0.1429,0.0357,560
+Weighted Avg,0.0204,0.1429,0.0357,560
