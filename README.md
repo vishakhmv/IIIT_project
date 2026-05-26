@@ -2425,9 +2425,10 @@ IIIT_project/
 │   │   │   ├── Text_model/
 │   │   │   └── Fusion_model/
 │   │   │
-│   │   ├── speech_accuracy_table.csv
-│   │   ├── text_accuracy_table.csv
-│   │   └── fusion_accuracy_table.csv
+│   │   ├── speech_classification_report.csv
+│   │   ├── text_classification_report.csv
+│   │   ├── fusion_classification_report.csv
+│   │   └── variant_accuracy_table.csv
 │   │
 │   └── requirements.txt
 │
@@ -2472,6 +2473,10 @@ IIIT_project/
 | `↳ test.py` | Evaluates the trained model and generates metrics and visualizations. |
 | `project/Results/` | Stores generated evaluation metrics, plots, and experimental outputs. |
 | `↳ plots/` | Contains confusion matrices, learning curves, and t-SNE visualizations for all models. |
+| `↳ speech_classification_report.csv`| Class-wise precision, recall, and F1-score for the Speech model. |
+| `↳ text_classification_report.csv` | Class-wise precision, recall, and F1-score for the Text model. |
+| `↳ fusion_classification_report.csv`| Class-wise precision, recall, and F1-score for the Fusion model. |
+| `↳ variant_accuracy_table.csv` | Summary table comparing overall test accuracy across all three architectures. |
 | `project/requirements.txt` | Python dependencies required for model training, evaluation, and visualization pipelines. |
 | `Web/` | Web-based interface for real-time multimodal emotion recognition using the trained Speech, Text, and Fusion models. |
 | `↳ app.py` | Flask backend responsible for loading trained models and performing local emotion inference. |
