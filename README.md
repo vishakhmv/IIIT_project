@@ -2669,7 +2669,7 @@ python -B project/models/fusion_pipeline/test.py
 
 ---
 
-> **💡 Note on the `-B` flag:** We use the `python -B` command to prevent Python from generating `__pycache__` folders, keeping the project directory clean during evaluation.
+> **💡 Note on the `-B` flag:** The the `python -B` command prevents Python from generating `__pycache__` folders, keeping the project directory clean during evaluation.
 
 ---
 
