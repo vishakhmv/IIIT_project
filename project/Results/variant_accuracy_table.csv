@@ -1,4 +1,4 @@
 Model Architecture,Input Modality,Feature Extraction,Overall Test Accuracy
-Text-Only Baseline,Text,DistilBERT,14.28%
+Text-Only Baseline,Text,DistilBERT,14.29%
 Speech-Only Architecture,Audio,HuBERT + MFCC,99.64%
-Proposed Multimodal Fusion,Audio + Text,HuBERT + MFCC + DistilBERT,99.28%
+Proposed Multimodal Fusion,Audio + Text,HuBERT + MFCC + DistilBERT,99.29%

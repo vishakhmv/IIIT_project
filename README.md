@@ -1272,7 +1272,7 @@ IIIT_project/
   <img src="assets/text-classification-report.png" width="75%">
 </p>
 
-The Text-Only model achieved an overall test accuracy of approximately **14.28%**, with extremely low precision, recall, and F1-scores across most emotional categories.
+The Text-Only model achieved an overall test accuracy of approximately **14.29%**, with extremely low precision, recall, and F1-scores across most emotional categories.
 
 The classification report shows that the model predominantly predicted a single emotion class (“Pleasant Surprise”), resulting in near-zero performance for the remaining categories. This behavior indicates poor class discrimination and highlights the limitations of relying solely on textual semantic information for emotion recognition on the TESS dataset.
 
@@ -2110,7 +2110,7 @@ IIIT_project/
   <img src="assets/fusion-classification-report.png" width="75%">
 </p>
 
-The Multimodal Fusion model achieved an overall test accuracy of approximately **99.28%** on unseen evaluation samples.
+The Multimodal Fusion model achieved an overall test accuracy of approximately **99.29%** on unseen evaluation samples.
 
 The generated classification report demonstrates exceptionally strong performance across all emotional categories, with precision, recall, and F1-scores remaining consistently close to perfect values.
 
@@ -2248,8 +2248,8 @@ The comparative evaluation of all three architectures demonstrates the importanc
 | Model | Input Modality | Test Accuracy |
 |---|---|---|
 | Speech-Only | Audio | 99.64% |
-| Text-Only | Text | 14.28% |
-| Multimodal Fusion | Audio + Text | 99.28% |
+| Text-Only | Text | 14.29% |
+| Multimodal Fusion | Audio + Text | 99.29% |
 
 ---
 
