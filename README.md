@@ -2,7 +2,7 @@
 
 ## 📖 Project Overview
 
-This project implements a **Multimodal Emotion Recognition System** capable of predicting human emotions using **speech-only, text-only, and combined speech-text inputs**.  
+This project implements a **Multimodal Emotion Recognition System** capable of predicting human emotions using **speech-only, text-only, and combined speech-text inputs**.
 
 The system classifies emotions into seven categories: **Angry, Disgust, Fear, Happy, Neutral, Pleasant Surprise, and Sad**.
 
@@ -29,6 +29,7 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [🔀 3. Multimodal Fusion Model](#fusion-model)
 
 - [📈 Final Results Summary](#evaluation-summary)
+- [⚠️ System Limitations & Constraints](#limitations)
 
 - [⚙️ Installation & Usage](#installation-and-usage)
   - [📥 1. Download Requirements](#download-requirements)
@@ -44,15 +45,17 @@ The project also includes **representation learning analysis, t-SNE visualizatio
 ---
 
 <a id="model-overview"></a>
+
 ## 🧠 Model Overview
 
-| Model | Input Modality | Main Backbone |
-|---|---|---|
-| Speech-Only | Audio | HuBERT + MFCC + BiLSTM |
-| Text-Only | Text | DistilBERT |
-| Multimodal Fusion | Audio + Text | HuBERT + MFCC + BiLSTM + DistilBERT |
+| Model             | Input Modality | Main Backbone                       |
+| ----------------- | -------------- | ----------------------------------- |
+| Speech-Only       | Audio          | HuBERT + MFCC + BiLSTM              |
+| Text-Only         | Text           | DistilBERT                          |
+| Multimodal Fusion | Audio + Text   | HuBERT + MFCC + BiLSTM + DistilBERT |
 
 <a id="dataset"></a>
+
 ## 📊 Dataset
 
 The models are trained and evaluated on the **TESS (Toronto Emotional Speech Set)** dataset.
@@ -85,12 +88,13 @@ The models are trained and evaluated on the **TESS (Toronto Emotional Speech Set
 
 The dataset uses linguistically neutral carrier phrases such as:
 
-> *“Say the word door”*  
-> *“Say the word neat”*
+> _“Say the word door”_  
+> _“Say the word neat”_
 
 All emotional categories contain the same spoken sentences, ensuring that emotional variation primarily comes from vocal expression rather than changes in textual content.
 
 <a id="data-extraction-and-splitting"></a>
+
 ## 📦 Data Extraction & Splitting
 
 The TESS dataset was extracted and processed using custom preprocessing scripts developed in Google Colab.
@@ -102,6 +106,7 @@ The TESS dataset was extracted and processed using custom preprocessing scripts 
 ---
 
 <a id="data-extraction"></a>
+
 ### 🔓 Data Extraction
 
 The compressed TESS dataset archive was extracted from Google Drive and verified before preprocessing.
@@ -123,6 +128,7 @@ The compressed TESS dataset archive was extracted from Google Drive and verified
 ```
 
 <a id="data-splitting"></a>
+
 ### ✂️ Data Splitting
 
 After dataset extraction, the complete TESS dataset was recursively processed to generate structured metadata for multimodal training and testing.
@@ -148,9 +154,9 @@ YAF_back_angry.wav
 
 This filename contains:
 
-- `YAF` → Speaker ID  
-- `back` → Spoken word  
-- `angry` → Emotion label  
+- `YAF` → Speaker ID
+- `back` → Spoken word
+- `angry` → Emotion label
 
 The preprocessing pipeline extracts the spoken word from the filename and reconstructs the transcript:
 
@@ -172,8 +178,8 @@ This generated text was used as input for:
 
 #### Example Speech-Text Pairs
 
-| Audio File | Generated Text |
-|---|---|
+| Audio File         | Generated Text    |
+| ------------------ | ----------------- |
 | YAF_back_angry.wav | say the word back |
 | YAF_door_happy.wav | say the word door |
 
@@ -183,15 +189,15 @@ This generated text was used as input for:
 
 Each emotion category was mapped into a numerical label for model training.
 
-| Emotion | Label |
-|---|---|
-| Angry | 0 |
-| Disgust | 1 |
-| Fear | 2 |
-| Happy | 3 |
-| Neutral | 4 |
-| Pleasant Surprise | 5 |
-| Sad | 6 |
+| Emotion           | Label |
+| ----------------- | ----- |
+| Angry             | 0     |
+| Disgust           | 1     |
+| Fear              | 2     |
+| Happy             | 3     |
+| Neutral           | 4     |
+| Pleasant Surprise | 5     |
+| Sad               | 6     |
 
 ---
 
@@ -219,6 +225,7 @@ Data_split/
 ```
 
 #### train_split.csv
+
 Contains all training samples used for:
 
 - Model learning
@@ -226,6 +233,7 @@ Contains all training samples used for:
 - Parameter optimization
 
 #### test_split.csv
+
 Contains unseen testing samples used for:
 
 - Final evaluation
@@ -238,19 +246,19 @@ Contains unseen testing samples used for:
 
 Each CSV file contains the following columns:
 
-| Column | Description |
-|---|---|
-| path | Relative path to audio sample |
-| text | Generated text transcript |
-| label_encoded | Numerical emotion label |
+| Column        | Description                   |
+| ------------- | ----------------------------- |
+| path          | Relative path to audio sample |
+| text          | Generated text transcript     |
+| label_encoded | Numerical emotion label       |
 
 ---
 
 #### 📌 Example CSV Entry
 
-| path | text | label_encoded |
-|---|---|---|
-| YAF_angry/YAF_back_angry.wav | say the word back | 0 |
+| path                         | text              | label_encoded |
+| ---------------------------- | ----------------- | ------------- |
+| YAF_angry/YAF_back_angry.wav | say the word back | 0             |
 
 ---
 
@@ -262,8 +270,8 @@ The final preprocessing pipeline produced a clean and reproducible multimodal da
 - Text Emotion Recognition
 - Multimodal Fusion Training
 
-
 <a id="models"></a>
+
 ## 🧠 Models
 
 This project consists of three independent deep learning pipelines:
@@ -271,6 +279,7 @@ This project consists of three independent deep learning pipelines:
 ---
 
 <a id="speech-only-model"></a>
+
 ### 🎙️ 1. Speech-Only Model
 
 The Speech-Only pipeline predicts emotions directly from raw audio signals by learning acoustic speech features such as tone, pitch, energy, etc.
@@ -385,15 +394,15 @@ The pooled emotional embedding is passed through a fully connected classificatio
 
 The classifier predicts one of the following seven emotional categories:
 
-| Emotion | Label |
-|---|---|
-| Angry | 0 |
-| Disgust | 1 |
-| Fear | 2 |
-| Happy | 3 |
-| Neutral | 4 |
-| Pleasant Surprise | 5 |
-| Sad | 6 |
+| Emotion           | Label |
+| ----------------- | ----- |
+| Angry             | 0     |
+| Disgust           | 1     |
+| Fear              | 2     |
+| Happy             | 3     |
+| Neutral           | 4     |
+| Pleasant Surprise | 5     |
+| Sad               | 6     |
 
 ---
 
@@ -431,11 +440,11 @@ Data_split/train_split.csv
 
 The CSV file contains:
 
-| Column | Description |
-|---|---|
-| path | Relative audio file path |
-| text | Generated transcript |
-| label_encoded | Numerical emotion label |
+| Column        | Description              |
+| ------------- | ------------------------ |
+| path          | Relative audio file path |
+| text          | Generated transcript     |
+| label_encoded | Numerical emotion label  |
 
 The dataset is loaded using the custom `TESSSpeechDataset` class implemented in PyTorch.
 
@@ -570,12 +579,12 @@ The optimizer updates trainable parameters using gradient-based backpropagation.
 
 Training configuration:
 
-| Parameter | Value |
-|---|---|
+| Parameter     | Value  |
+| ------------- | ------ |
 | Learning Rate | `1e-4` |
-| Weight Decay | `1e-2` |
-| Batch Size | `32` |
-| Epochs | `10` |
+| Weight Decay  | `1e-2` |
+| Batch Size    | `32`   |
+| Epochs        | `10`   |
 
 ---
 
@@ -671,7 +680,6 @@ to perform high-accuracy speech emotion recognition.
 
 ---
 
-
 #### 📊 c. Testing & Evaluation Pipeline
 
 The Speech-Only evaluation pipeline measures the model’s ability to generalize on unseen speech samples using multiple quantitative and visualization-based evaluation techniques.
@@ -742,6 +750,7 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
+
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -774,6 +783,7 @@ IIIT_project/
 The Speech-Only model achieved an overall test accuracy of approximately **99.64%** on unseen evaluation samples, demonstrating highly robust emotional speech classification performance.
 
 ---
+
 ##### 🔥 Confusion Matrix Analysis
 
 A confusion matrix is generated using:
@@ -843,6 +853,7 @@ The near-perfect classification metrics and clearly separated latent clusters in
 ---
 
 <a id="text-only-model"></a>
+
 ### 📝 2. Text-Only Model
 
 The Text-Only pipeline predicts emotions using text.
@@ -850,6 +861,7 @@ The Text-Only pipeline predicts emotions using text.
 It learns semantic and contextual language representations directly from textual input using a pretrained transformer-based language model.
 
 ---
+
 #### 🏗️ a. System Architecture
 
 The Text-Only architecture performs emotion classification using pretrained transformer-based contextual language embeddings generated by DistilBERT.
@@ -946,15 +958,15 @@ The CLS embedding is passed through a fully connected classification head consis
 
 The classifier predicts one of the following seven emotional categories:
 
-| Emotion | Label |
-|---|---|
-| Angry | 0 |
-| Disgust | 1 |
-| Fear | 2 |
-| Happy | 3 |
-| Neutral | 4 |
-| Pleasant Surprise | 5 |
-| Sad | 6 |
+| Emotion           | Label |
+| ----------------- | ----- |
+| Angry             | 0     |
+| Disgust           | 1     |
+| Fear              | 2     |
+| Happy             | 3     |
+| Neutral           | 4     |
+| Pleasant Surprise | 5     |
+| Sad               | 6     |
 
 ---
 
@@ -982,11 +994,11 @@ Data_split/train_split.csv
 
 The CSV file contains:
 
-| Column | Description |
-|---|---|
-| path | Relative audio file path |
-| text | Generated transcript |
-| label_encoded | Numerical emotion label |
+| Column        | Description              |
+| ------------- | ------------------------ |
+| path          | Relative audio file path |
+| text          | Generated transcript     |
+| label_encoded | Numerical emotion label  |
 
 The complete training dataset is further divided into:
 
@@ -1243,6 +1255,7 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
+
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -1388,6 +1401,7 @@ for effective emotional understanding.
 ---
 
 <a id="fusion-model"></a>
+
 ### 🔀 3. Multimodal Fusion Model
 
 The Multimodal Fusion pipeline predicts emotions by jointly learning from both speech and textual representations.
@@ -1595,15 +1609,15 @@ The fused multimodal representation is passed through a fully connected classifi
 
 The classifier predicts one of the following seven emotional categories:
 
-| Emotion | Label |
-|---|---|
-| Angry | 0 |
-| Disgust | 1 |
-| Fear | 2 |
-| Happy | 3 |
-| Neutral | 4 |
-| Pleasant Surprise | 5 |
-| Sad | 6 |
+| Emotion           | Label |
+| ----------------- | ----- |
+| Angry             | 0     |
+| Disgust           | 1     |
+| Fear              | 2     |
+| Happy             | 3     |
+| Neutral           | 4     |
+| Pleasant Surprise | 5     |
+| Sad               | 6     |
 
 ---
 
@@ -1645,11 +1659,11 @@ pd.read_csv()
 
 The CSV file contains:
 
-| Column | Description |
-|---|---|
-| path | Relative audio file path |
-| text | Speech transcript |
-| label_encoded | Numerical emotion label |
+| Column        | Description              |
+| ------------- | ------------------------ |
+| path          | Relative audio file path |
+| text          | Speech transcript        |
+| label_encoded | Numerical emotion label  |
 
 The multimodal training pipeline simultaneously uses:
 
@@ -1876,12 +1890,12 @@ torch.optim.AdamW()
 
 Optimization configuration:
 
-| Parameter | Value |
-|---|---|
+| Parameter     | Value  |
+| ------------- | ------ |
 | Learning Rate | `1e-4` |
-| Weight Decay | `1e-2` |
-| Batch Size | `32` |
-| Epochs | `10` |
+| Weight Decay  | `1e-2` |
+| Batch Size    | `32`   |
+| Epochs        | `10`   |
 
 The optimizer updates trainable fusion and classification parameters using gradient-based backpropagation.
 
@@ -2081,6 +2095,7 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
+
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -2241,15 +2256,16 @@ By integrating:
 the architecture achieves highly robust multimodal emotion recognition performance with strong generalization capability on unseen emotional speech samples.
 
 <a id="evaluation-summary"></a>
+
 ## 📈 Final Results Summary
 
 The comparative evaluation of all three architectures demonstrates the importance of acoustic speech information for robust emotion recognition on the TESS dataset.
 
-| Model | Input Modality | Test Accuracy |
-|---|---|---|
-| Speech-Only | Audio | 99.64% |
-| Text-Only | Text | 14.29% |
-| Multimodal Fusion | Audio + Text | 99.29% |
+| Model             | Input Modality | Test Accuracy |
+| ----------------- | -------------- | ------------- |
+| Speech-Only       | Audio          | 99.64%        |
+| Text-Only         | Text           | 14.29%        |
+| Multimodal Fusion | Audio + Text   | 99.29%        |
 
 ---
 
@@ -2283,10 +2299,28 @@ This project demonstrates that acoustic speech information plays a dominant role
 
 The experimental results further show that multimodal learning can effectively integrate speech and language representations to build highly accurate and robust emotion recognition systems.
 
+---
+---
+
+<a id="limitations"></a>
+## ⚠️ System Limitations & Constraints
+
+While the Speech-Only and Multimodal Fusion models achieve highly robust accuracy on the testing data, both pipelines possess inherent limitations tied directly to their baseline training environment:
+
+- **Gender and Age Bias:** The TESS dataset exclusively features recordings from two female actresses (aged 26 and 64). Because the underlying feature encoders have never been exposed to male voices, children's voices, or diverse vocal pitches outside this specific demographic, both the Speech-Only and Multimodal Fusion models will struggle to accurately generalize emotional states across a broader human population.
+- **Environmental Noise Sensitivity:** All training samples consist of clean, studio-recorded audio. The acoustic feature extractors have not been exposed to raw waveform data augmentation involving environmental noise. As a result, both the speech-only and multimodal fusion systems may experience notable performance degradation in real-world settings containing ambient background noise, overlapping speech, or low-quality microphone inputs.
+- **Textual Lexical Variance:** As highlighted in the failure analysis, the Text-Only model collapses on the TESS dataset due to the use of identical carrier phrases. While the fusion model successfully utilizes the audio modality to disambiguate and gate this out, the current semantic branch remains unequipped to handle complex, real-world conversational text without being structurally retrained on a more linguistically diverse dataset (e.g., AICHE, IEMOCAP, or MELD).
+
+These limitations provide a clear pathway for **Future Work**, including training on diverse, multi-speaker datasets and applying noise-injection techniques to improve real-world robustness for all acoustic-based pipelines.
+
+---
+
 <a id="installation-and-usage"></a>
+
 ## ⚙️ Installation & Usage
 
 <a id="download-requirements"></a>
+
 ### 📥 1. Download Requirements
 
 Before running the project, download the required dataset and pretrained model checkpoints.
@@ -2297,7 +2331,7 @@ Before running the project, download the required dataset and pretrained model c
 
 Download the official TESS dataset in `.zip` format from Kaggle:
 
-* [Toronto Emotional Speech Set (TESS)](https://www.kaggle.com/datasets/ejlok1/toronto-emotional-speech-set-tess)
+- [Toronto Emotional Speech Set (TESS)](https://www.kaggle.com/datasets/ejlok1/toronto-emotional-speech-set-tess)
 
 After downloading:
 
@@ -2328,10 +2362,10 @@ IIIT_project/
 
 Both versions are intentionally maintained because different project components use them differently.
 
-| File / Folder | Purpose |
-|---|---|
-| `archive.zip` | Used by `colab_data_extraction.py` during dataset extraction and preprocessing |
-| `TESS Toronto emotional speech set data/` | Used directly by dataset split generation, training, and testing pipelines |
+| File / Folder                             | Purpose                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `archive.zip`                             | Used by `colab_data_extraction.py` during dataset extraction and preprocessing |
+| `TESS Toronto emotional speech set data/` | Used directly by dataset split generation, training, and testing pipelines     |
 
 The extraction pipeline first reads the compressed archive and extracts the dataset locally.
 
@@ -2366,10 +2400,10 @@ The compressed `archive.zip` file is only required when running:
 
 Download pretrained model checkpoints from the following Google Drive links:
 
-| Model | Download Link |
-|---|---|
-| 🎙️ Speech-Only Model | [Download](https://drive.google.com/file/d/1ljNiWmN_klH4EFLnPHLLsIVzHvRtrQaA/view?usp=drive_link) |
-| 📝 Text-Only Model | [Download](https://drive.google.com/file/d/1CCUGR08Ozg_9bhWtyu4Ib6qasQiJ1nO8/view?usp=drive_link) |
+| Model                      | Download Link                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| 🎙️ Speech-Only Model       | [Download](https://drive.google.com/file/d/1ljNiWmN_klH4EFLnPHLLsIVzHvRtrQaA/view?usp=drive_link) |
+| 📝 Text-Only Model         | [Download](https://drive.google.com/file/d/1CCUGR08Ozg_9bhWtyu4Ib6qasQiJ1nO8/view?usp=drive_link) |
 | 🔀 Multimodal Fusion Model | [Download](https://drive.google.com/file/d/1oP1F4-bpNNY3zwPs2Q1W7l_kNx5ptRvT/view?usp=drive_link) |
 
 All checkpoints are also available together in a single Drive folder:
@@ -2388,6 +2422,7 @@ IIIT_project/
 ---
 
 <a id="project-structure"></a>
+
 ### 📁 2. Project Structure
 
 ```bash
@@ -2448,50 +2483,54 @@ IIIT_project/
 └── Report.pdf
 
 ```
+
 ---
 
 <a id="file-and-folder-explanation"></a>
+
 ### 📖 3. File & Folder Explanation
 
-| File / Folder | Description |
-|---|---|
-| `assets/` | Contains README visualization assets, architecture diagrams, learning curves, confusion matrices, and t-SNE plots. |
-| `Data_split/` | Contains dataset preprocessing scripts and generated train-test split CSV files. |
-| `↳ colab_data_extraction.py` | Extracts and prepares the original TESS dataset from the compressed archive. |
-| `↳ colab_data_split.py` | Generates structured training and testing CSV splits from the extracted dataset. |
-| `↳ train_split.csv` | Training metadata file containing audio paths, generated transcripts, and encoded emotion labels. |
-| `↳ test_split.csv` | Testing metadata file containing audio paths, generated transcripts, and encoded emotion labels. |
-| `project/models/` | Contains all Speech-Only, Text-Only, and Multimodal Fusion training and evaluation pipelines. |
-| `↳ speech_pipeline/` | Training and evaluation pipeline for the Speech-Only architecture. |
-| `↳ text_pipeline/` | Training and evaluation pipeline for the Text-Only architecture. |
-| `↳ fusion_pipeline/` | Training and evaluation pipeline for the Multimodal Fusion architecture. |
-| `↳ train.py` | Trains the corresponding architecture. |
-| `↳ test.py` | Evaluates the trained model and generates metrics and visualizations. |
-| `project/Results/` | Stores generated evaluation metrics, plots, and experimental outputs. |
-| `↳ plots/` | Contains confusion matrices, learning curves, and t-SNE visualizations for all models. |
-| `↳ speech_classification_report.csv`| Class-wise precision, recall, and F1-score for the Speech model. |
-| `↳ text_classification_report.csv` | Class-wise precision, recall, and F1-score for the Text model. |
-| `↳ fusion_classification_report.csv`| Class-wise precision, recall, and F1-score for the Fusion model. |
-| `↳ variant_accuracy_table.csv` | Summary table comparing overall test accuracy across all three architectures. |
-| `project/requirements.txt` | Python dependencies required for model training, evaluation, and visualization pipelines. |
-| `Web/` | Web-based interface for real-time multimodal emotion recognition using the trained Speech, Text, and Fusion models. |
-| `↳ app.py` | Flask backend responsible for loading trained models and performing local emotion inference. |
-| `↳ index.html` | Main frontend webpage for user interaction and emotion prediction. |
-| `↳ style.css` | Frontend styling and responsive user interface design. |
-| `↳ script.js` | Frontend interaction logic and communication with the Flask backend. |
-| `↳ requirements.txt` | Python dependencies required for running the web application locally. |
-| `TESS_dataset/` | Contains both compressed and extracted versions of the TESS emotional speech dataset. |
-| `↳ archive.zip` | Original compressed TESS dataset archive used during preprocessing. |
-| `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech samples. |
-| `best_speech_model.pth` | Pretrained Speech-Only model checkpoint. |
-| `best_text_model.pth` | Pretrained Text-Only model checkpoint. |
-| `best_fusion_model.pth` | Pretrained Multimodal Fusion model checkpoint. |
-| `.gitignore` | Prevents large datasets, model checkpoints, cache files, and system files from being tracked by Git. |
-| `README.md` | Project documentation, architecture explanations, setup instructions, experimental results, and workflow details. |
-| `Report.pdf` | Complete technical report containing architecture design, experiments, analysis, observations, and conclusions. |
+| File / Folder                               | Description                                                                                                         |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `assets/`                                   | Contains README visualization assets, architecture diagrams, learning curves, confusion matrices, and t-SNE plots.  |
+| `Data_split/`                               | Contains dataset preprocessing scripts and generated train-test split CSV files.                                    |
+| `↳ colab_data_extraction.py`                | Extracts and prepares the original TESS dataset from the compressed archive.                                        |
+| `↳ colab_data_split.py`                     | Generates structured training and testing CSV splits from the extracted dataset.                                    |
+| `↳ train_split.csv`                         | Training metadata file containing audio paths, generated transcripts, and encoded emotion labels.                   |
+| `↳ test_split.csv`                          | Testing metadata file containing audio paths, generated transcripts, and encoded emotion labels.                    |
+| `project/models/`                           | Contains all Speech-Only, Text-Only, and Multimodal Fusion training and evaluation pipelines.                       |
+| `↳ speech_pipeline/`                        | Training and evaluation pipeline for the Speech-Only architecture.                                                  |
+| `↳ text_pipeline/`                          | Training and evaluation pipeline for the Text-Only architecture.                                                    |
+| `↳ fusion_pipeline/`                        | Training and evaluation pipeline for the Multimodal Fusion architecture.                                            |
+| `↳ train.py`                                | Trains the corresponding architecture.                                                                              |
+| `↳ test.py`                                 | Evaluates the trained model and generates metrics and visualizations.                                               |
+| `project/Results/`                          | Stores generated evaluation metrics, plots, and experimental outputs.                                               |
+| `↳ plots/`                                  | Contains confusion matrices, learning curves, and t-SNE visualizations for all models.                              |
+| `↳ speech_classification_report.csv`        | Class-wise precision, recall, and F1-score for the Speech model.                                                    |
+| `↳ text_classification_report.csv`          | Class-wise precision, recall, and F1-score for the Text model.                                                      |
+| `↳ fusion_classification_report.csv`        | Class-wise precision, recall, and F1-score for the Fusion model.                                                    |
+| `↳ variant_accuracy_table.csv`              | Summary table comparing overall test accuracy across all three architectures.                                       |
+| `project/requirements.txt`                  | Python dependencies required for model training, evaluation, and visualization pipelines.                           |
+| `Web/`                                      | Web-based interface for real-time multimodal emotion recognition using the trained Speech, Text, and Fusion models. |
+| `↳ app.py`                                  | Flask backend responsible for loading trained models and performing local emotion inference.                        |
+| `↳ index.html`                              | Main frontend webpage for user interaction and emotion prediction.                                                  |
+| `↳ style.css`                               | Frontend styling and responsive user interface design.                                                              |
+| `↳ script.js`                               | Frontend interaction logic and communication with the Flask backend.                                                |
+| `↳ requirements.txt`                        | Python dependencies required for running the web application locally.                                               |
+| `TESS_dataset/`                             | Contains both compressed and extracted versions of the TESS emotional speech dataset.                               |
+| `↳ archive.zip`                             | Original compressed TESS dataset archive used during preprocessing.                                                 |
+| `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech samples.                                                |
+| `best_speech_model.pth`                     | Pretrained Speech-Only model checkpoint.                                                                            |
+| `best_text_model.pth`                       | Pretrained Text-Only model checkpoint.                                                                              |
+| `best_fusion_model.pth`                     | Pretrained Multimodal Fusion model checkpoint.                                                                      |
+| `.gitignore`                                | Prevents large datasets, model checkpoints, cache files, and system files from being tracked by Git.                |
+| `README.md`                                 | Project documentation, architecture explanations, setup instructions, experimental results, and workflow details.   |
+| `Report.pdf`                                | Complete technical report containing architecture design, experiments, analysis, observations, and conclusions.     |
+
 ---
 
 <a id="clone-repo"></a>
+
 ### ⬇️ 4. Clone Repository
 
 Clone the project repository from GitHub:
@@ -2509,6 +2548,7 @@ cd IIIT_project
 ---
 
 <a id="after-cloning"></a>
+
 #### 📂 5. After Cloning
 
 After cloning the repository, place the dataset and model weights in the correct directory structure
@@ -2532,6 +2572,7 @@ Please download them separately using the links provided in the **Download Requi
 ---
 
 <a id="install-dependencies"></a>
+
 ### 🛠️ 6. Install Dependencies
 
 Install all required Python libraries using:
@@ -2546,19 +2587,18 @@ pip install -r project/requirements.txt
 
 The project primarily uses the following libraries and frameworks:
 
-| Library | Purpose |
-|---|---|
-| `PyTorch` | Deep learning framework for model training and inference |
-| `Transformers` | Provides pretrained HuBERT and DistilBERT models |
-| `Librosa` | Audio loading and MFCC feature extraction |
-| `Scikit-learn` | Dataset splitting, evaluation metrics, and t-SNE |
-| `Pandas` | CSV handling and structured data processing |
-| `NumPy` | Numerical computations and tensor preparation |
-| `Matplotlib` | Plot generation and visualization |
-| `Seaborn` | Confusion matrix and statistical visualizations |
+| Library        | Purpose                                                  |
+| -------------- | -------------------------------------------------------- |
+| `PyTorch`      | Deep learning framework for model training and inference |
+| `Transformers` | Provides pretrained HuBERT and DistilBERT models         |
+| `Librosa`      | Audio loading and MFCC feature extraction                |
+| `Scikit-learn` | Dataset splitting, evaluation metrics, and t-SNE         |
+| `Pandas`       | CSV handling and structured data processing              |
+| `NumPy`        | Numerical computations and tensor preparation            |
+| `Matplotlib`   | Plot generation and visualization                        |
+| `Seaborn`      | Confusion matrix and statistical visualizations          |
 
 ---
-
 
 #### ⚠️ Important Note
 
@@ -2572,6 +2612,7 @@ Ensure that your system has an active internet connection during the initial set
 ---
 
 <a id="training"></a>
+
 ### 🚀 7. Run Training
 
 > **Optional:**  
@@ -2632,9 +2673,11 @@ IIIT_project/
             ├── Text_model/
             └── Fusion_model/
 ```
+
 ---
 
 <a id="testing"></a>
+
 ### 🧪 8. Run Testing
 
 The testing pipelines evaluate pretrained models on unseen test samples and automatically generate:
@@ -2726,11 +2769,11 @@ IIIT_project/
 
 Each testing pipeline produces:
 
-| Artifact | Description |
-|---|---|
+| Artifact                    | Description                                        |
+| --------------------------- | -------------------------------------------------- |
 | `classification_report.csv` | Class-wise Precision, Recall, and F1-Score metrics |
-| `confusion_matrix.png` | Class-wise prediction performance visualization |
-| `tsne.png` | Latent feature-space clustering visualization |
+| `confusion_matrix.png`      | Class-wise prediction performance visualization    |
+| `tsne.png`                  | Latent feature-space clustering visualization      |
 
 ---
 
@@ -2738,10 +2781,10 @@ Each testing pipeline produces:
 
 Example testing demonstrations for all three architectures:
 
-| Model | Demo Video |
-|---|---|
-| 🎙️ Speech-Only Model | [Watch Demo](https://drive.google.com/file/d/1JdgQiZig_IydqLO_BgVXBRuZDKguvfAR/view?usp=drive_link) |
-| 📝 Text-Only Model | [Watch Demo](https://drive.google.com/file/d/1N0V3SBaDMd1nXcsnOz-80AXdc2nAGugd/view?usp=drive_link) |
+| Model                      | Demo Video                                                                                          |
+| -------------------------- | --------------------------------------------------------------------------------------------------- |
+| 🎙️ Speech-Only Model       | [Watch Demo](https://drive.google.com/file/d/1JdgQiZig_IydqLO_BgVXBRuZDKguvfAR/view?usp=drive_link) |
+| 📝 Text-Only Model         | [Watch Demo](https://drive.google.com/file/d/1N0V3SBaDMd1nXcsnOz-80AXdc2nAGugd/view?usp=drive_link) |
 | 🔀 Multimodal Fusion Model | [Watch Demo](https://drive.google.com/file/d/1DCMvcD3ghM_wx8UfSQTg3Hy2_BjBy71J/view?usp=drive_link) |
 
 ---
@@ -2753,7 +2796,8 @@ Example testing demonstrations for all three architectures:
 The project includes a fully functional and responsive web application named **Bhavora AI**, built using a Python (Flask) backend with an HTML/CSS/JavaScript frontend.
 
 #### ✨ The Meaning of "Bhavora"
-The name **Bhavora** is inspired by the Sanskrit word ***“Bhava”*** (भाव), meaning emotion or feeling, combined with the word ***“Aura”*** representing an emotional presence or atmosphere. Together, Bhavora symbolizes an “Emotional Aura,” reflecting the system’s ability to recognize human emotions from subtle patterns in speech and text.
+
+The name **Bhavora** is inspired by the Sanskrit word **_“Bhava”_** (भाव), meaning emotion or feeling, combined with the word **_“Aura”_** representing an emotional presence or atmosphere. Together, Bhavora symbolizes an “Emotional Aura,” reflecting the system’s ability to recognize human emotions from subtle patterns in speech and text.
 
 The web interface allows real-time emotion prediction using the pretrained Speech-Only, Text-Only, and Multimodal Fusion architectures through an interactive dashboard.
 
@@ -2781,15 +2825,15 @@ pip install -r requirements.txt
 
 To maintain a lightweight inference environment independent of the training pipeline, the web application uses a separate `requirements.txt` file. The backend server relies on the following packages:
 
-| Library | Version Requirement | Purpose |
-| :--- | :--- | :--- |
-| `torch` | `>=2.0.0` | Deep learning framework used for loading pretrained model weights and performing inference |
-| `transformers` | `>=4.35.0` | Provides pretrained transformer architectures including DistilBERT and HuBERT |
-| `flask` | `>=3.0.0` | Lightweight backend web framework used to serve the inference application |
-| `librosa` | `>=0.10.0` | Audio processing library used for waveform loading and MFCC feature extraction |
-| `soundfile` | `>=0.12.1` | Handles decoding and processing of uploaded audio files |
-| `numpy` | `>=1.24.0` | Numerical computation library used for tensor preparation and preprocessing |
-| `Flask-CORS` | `>=4.0.0` | Enables secure communication between the frontend interface and backend server |
+| Library        | Version Requirement | Purpose                                                                                    |
+| :------------- | :------------------ | :----------------------------------------------------------------------------------------- |
+| `torch`        | `>=2.0.0`           | Deep learning framework used for loading pretrained model weights and performing inference |
+| `transformers` | `>=4.35.0`          | Provides pretrained transformer architectures including DistilBERT and HuBERT              |
+| `flask`        | `>=3.0.0`           | Lightweight backend web framework used to serve the inference application                  |
+| `librosa`      | `>=0.10.0`          | Audio processing library used for waveform loading and MFCC feature extraction             |
+| `soundfile`    | `>=0.12.1`          | Handles decoding and processing of uploaded audio files                                    |
+| `numpy`        | `>=1.24.0`          | Numerical computation library used for tensor preparation and preprocessing                |
+| `Flask-CORS`   | `>=4.0.0`           | Enables secure communication between the frontend interface and backend server             |
 
 ---
 
@@ -2819,10 +2863,10 @@ http://127.0.0.1:5000
 
 The web dashboard supports real-time emotion prediction for all three architectures:
 
-| Mode | Description |
-|---|---|
-| 🎙️ Speech-Only | Upload `.wav` or `.flac` audio files for speech emotion recognition |
-| 📝 Text-Only | Enter text input for semantic emotion prediction |
+| Mode                 | Description                                                            |
+| -------------------- | ---------------------------------------------------------------------- |
+| 🎙️ Speech-Only       | Upload `.wav` or `.flac` audio files for speech emotion recognition    |
+| 📝 Text-Only         | Enter text input for semantic emotion prediction                       |
 | 🔀 Multimodal Fusion | Provide both speech and text inputs for multimodal emotion recognition |
 
 ---
