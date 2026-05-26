@@ -742,7 +742,6 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
-
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -751,12 +750,12 @@ The evaluation pipeline computes detailed classification metrics using:
 classification_report()
 ```
 
-The generated metrics include:
+The generated metrics strictly reflect class-wise and averaged performance, including:
 
 - Precision
 - Recall
 - F1-Score
-- Overall Accuracy
+- Support
 - Macro Average
 - Weighted Average
 
@@ -765,17 +764,16 @@ Generated output:
 ```bash
 IIIT_project/
 └── Results/
-    └── speech_accuracy_table.csv
+    └── speech_classification_report.csv
 ```
 
 <p align="center">
-  <img src="assets/speech-accuracy-table.png" width="75%">
+  <img src="assets/speech-classification-report.png" width="75%">
 </p>
 
 The Speech-Only model achieved an overall test accuracy of approximately **99.64%** on unseen evaluation samples, demonstrating highly robust emotional speech classification performance.
 
 ---
-
 ##### 🔥 Confusion Matrix Analysis
 
 A confusion matrix is generated using:
@@ -1245,7 +1243,6 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
-
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -1254,12 +1251,12 @@ The evaluation pipeline computes detailed classification metrics using:
 classification_report()
 ```
 
-The generated metrics include:
+The generated metrics strictly reflect class-wise and averaged performance, including:
 
 - Precision
 - Recall
 - F1-Score
-- Overall Accuracy
+- Support
 - Macro Average
 - Weighted Average
 
@@ -1268,16 +1265,16 @@ Generated output:
 ```bash
 IIIT_project/
 └── Results/
-    └── text_accuracy_table.csv
+    └── text_classification_report.csv
 ```
 
 <p align="center">
-  <img src="assets/text-accuracy-table.png" width="75%">
+  <img src="assets/text-classification-report.png" width="75%">
 </p>
 
 The Text-Only model achieved an overall test accuracy of approximately **14.28%**, with extremely low precision, recall, and F1-scores across most emotional categories.
 
-This performance is close to random guessing across seven classes, indicating that semantic text information alone is insufficient for reliable emotion recognition in the TESS dataset.
+The classification report shows that the model predominantly predicted a single emotion class (“Pleasant Surprise”), resulting in near-zero performance for the remaining categories. This behavior indicates poor class discrimination and highlights the limitations of relying solely on textual semantic information for emotion recognition on the TESS dataset.
 
 ---
 
@@ -2084,7 +2081,6 @@ During evaluation:
 The predicted emotion corresponds to the class with the highest probability score.
 
 ---
-
 ##### 📈 Classification Metrics
 
 The evaluation pipeline computes detailed classification metrics using:
@@ -2093,12 +2089,12 @@ The evaluation pipeline computes detailed classification metrics using:
 classification_report()
 ```
 
-The generated metrics include:
+The generated metrics strictly reflect class-wise and averaged performance, including:
 
 - Precision
 - Recall
 - F1-Score
-- Overall Accuracy
+- Support
 - Macro Average
 - Weighted Average
 
@@ -2107,25 +2103,25 @@ Generated output:
 ```bash
 IIIT_project/
 └── Results/
-    └── fusion_accuracy_table.csv
+    └── fusion_classification_report.csv
 ```
 
 <p align="center">
-  <img src="assets/fusion-accuracy-table.png" width="75%">
+  <img src="assets/fusion-classification-report.png" width="75%">
 </p>
 
 The Multimodal Fusion model achieved an overall test accuracy of approximately **99.28%** on unseen evaluation samples.
 
-The generated classification metrics demonstrate extremely strong performance across nearly all emotional categories, with precision, recall, and F1-scores remaining close to perfect values for most classes.
+The generated classification report demonstrates exceptionally strong performance across all emotional categories, with precision, recall, and F1-scores remaining consistently close to perfect values.
 
-Only minimal performance degradation is observed for emotionally similar categories such as:
+Only minor variations are observed in emotionally similar categories such as:
 
 - Neutral
 - Pleasant Surprise
 - Disgust
 - Sad
 
-which still maintain exceptionally high classification performance.
+Despite these slight variations, the model maintains highly reliable and balanced classification performance across all seven emotion classes.
 
 ---
 
@@ -2320,7 +2316,7 @@ TESS Toronto emotional speech set data/
 3. Place both the `.zip` file and extracted dataset folder inside:
 
 ```bash
-IIIT_PROJECT/
+IIIT_project/
 └── TESS_dataset/
     ├── archive.zip
     └── TESS Toronto emotional speech set data/
@@ -2383,7 +2379,7 @@ All checkpoints are also available together in a single Drive folder:
 After downloading, place the pretrained weights inside the root project directory:
 
 ```bash
-IIIT_PROJECT/
+IIIT_project/
 ├── best_speech_model.pth
 ├── best_text_model.pth
 ├── best_fusion_model.pth
@@ -2681,23 +2677,23 @@ python -B project/models/fusion_pipeline/test.py
 
 Testing automatically generates:
 
-- classification metric tables (`.csv`)
+- classification reports (`.csv`)
 - confusion matrices
 - t-SNE visualizations
 
 ---
 
-##### 📊 Accuracy Tables
+##### 📊 Classification Reports
 
-Generated accuracy tables are stored in:
+Generated classification reports are stored in:
 
 ```bash
 IIIT_project/
 └── project/
     └── Results/
-        ├── speech_accuracy_table.csv
-        ├── text_accuracy_table.csv
-        └── fusion_accuracy_table.csv
+        ├── speech_classification_report.csv
+        ├── text_classification_report.csv
+        └── fusion_classification_report.csv
 ```
 
 ---
@@ -2732,7 +2728,7 @@ Each testing pipeline produces:
 
 | Artifact | Description |
 |---|---|
-| `accuracy_table.csv` | Precision, Recall, F1-Score, and Accuracy metrics |
+| `classification_report.csv` | Class-wise Precision, Recall, and F1-Score metrics |
 | `confusion_matrix.png` | Class-wise prediction performance visualization |
 | `tsne.png` | Latent feature-space clustering visualization |
 
