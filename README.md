@@ -42,6 +42,7 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [🧪 8. Run Testing](#testing)
   - [💬 9. Standalone MELD Text Emotion Recognition Model](#meld-text-model)
   - [🌐 10. Run Web Application](#web-app)
+- [✅ Conclusion](#conclusion)
 
 ---
 
@@ -3121,5 +3122,22 @@ The web application includes:
 Watch the real-time emotion recognition system in action:
 
 - [Watch Web Application Demo](https://drive.google.com/file/d/1S3PBq-C0EeLMSWoC8bE-xJpc2mXzv23d/view?usp=drive_link)
+
+---
+
+<a id="conclusion"></a>
+## ✅ Conclusion
+
+This project set out to investigate whether emotion recognition could be made more robust by combining speech and text modalities, and the results clearly validate that hypothesis — with some revealing nuances along the way.
+
+The Speech-Only model, powered by HuBERT embeddings, MFCC features, and BiLSTM temporal modeling, achieved near-perfect accuracy of **99.64%**, demonstrating that acoustic signals carry rich, highly discriminative emotional information.
+
+The Text-Only model, by contrast, collapsed to just **14.29%** — not due to architectural weakness, but because the TESS dataset's linguistically uniform carrier phrases (*"say the word back"*) offer virtually no semantic variation across emotion classes. This failure is itself an important finding, it exposes the fundamental limits of text-only emotion recognition on acoustically-driven datasets.
+
+The additional experimental extension using the **MELD conversational emotion dataset** further reinforced these findings. Unlike TESS, MELD contains semantically rich conversational dialogue, allowing transformer-based language models to learn meaningful emotional patterns directly from text. The RoBERTa-based MELD model achieved significantly stronger text emotion recognition performance, highlighting how dataset diversity and conversational context play a critical role in multimodal affective computing.
+
+The Multimodal Fusion model, combining both modalities, achieved **99.29% accuracy** — and its significance lies not merely in the number, but in what it demonstrates architecturally. Even when one modality (text) is largely uninformative, fusing it with a strong modality (speech) produces a more stable and generalizable representation than either branch alone.
+
+Ultimately, **Bhavora AI** highlights how multimodal deep learning can bridge speech and language understanding to build emotion recognition systems that are not only highly accurate.
 
 ---
