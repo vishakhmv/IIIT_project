@@ -1401,7 +1401,7 @@ for effective emotional understanding.
 
 ---
 
-#### 💬 d. Experimental Extension — Standalone MELD Text Emotion Recognition
+#### 💬 d. Experimental Extension — MELD Text Emotion Recognition
 
 A standalone **RoBERTa-based** text emotion recognition model was experimentally trained and evaluated on the **MELD (Multimodal EmotionLines Dataset)** conversational emotion corpus to investigate transformer-based emotion understanding in dialogue contexts. Unlike TESS, MELD provides multi-speaker conversational dialogue with richer contextual and emotional variations, enabling transformer architectures to leverage semantic representations more effectively.
 
