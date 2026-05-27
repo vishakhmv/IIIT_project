@@ -1401,15 +1401,34 @@ for effective emotional understanding.
 
 ---
 
-### 💬 Experimental Extension — Standalone MELD Text Emotion Recognition
+#### 💬 d. Experimental Extension — Standalone MELD Text Emotion Recognition
 
-A standalone RoBERTa-based model was experimentally trained and evaluated on the MELD conversational emotion dataset to investigate transformer-based emotion understanding in dialogue contexts. Unlike TESS, MELD provides multi-speaker conversational dialogue with richer contextual and emotional variations, allowing transformer architectures to leverage semantic representations more effectively.
+A standalone **RoBERTa-based** text emotion recognition model was experimentally trained and evaluated on the **MELD (Multimodal EmotionLines Dataset)** conversational emotion corpus to investigate transformer-based emotion understanding in dialogue contexts. Unlike TESS, MELD provides multi-speaker conversational dialogue with richer contextual and emotional variations, enabling transformer architectures to leverage semantic representations more effectively.
 
 > ⚠️ Since TESS and MELD differ in domain, size, and class distribution, performance differences reflect dataset characteristics as much as architectural suitability and should not be directly compared.
 
 ---
 
-#### 📊 MELD Classification Performance
+##### 🏗️ Architecture & Tools
+
+The standalone MELD model is built around a **RoBERTa (`roberta-base`)** transformer encoder fine-tuned for 7-class emotion classification.
+
+| Component | Details |
+|-----------|---------|
+| **Base Model** | `roberta-base` (HuggingFace Transformers) |
+| **Tokenizer** | `RobertaTokenizer` — max sequence length 128 |
+| **Classification Head** | Linear layer over `[CLS]` token embedding → 7 emotion classes |
+| **Optimizer** | AdamW — lr `2e-5` |
+| **Loss** | CrossEntropyLoss |
+| **Batch Size** | 16 |
+| **Epochs** | 5 |
+| **Framework** | PyTorch |
+
+Unlike the TESS text model (which freezes DistilBERT and trains only the classifier head), the **entire RoBERTa model is fine-tuned end-to-end** here, allowing it to adapt its pretrained language representations to the emotion-labeled conversational dialogue domain.
+
+---
+
+##### 📊 MELD Classification Performance
 
 | Emotion  | Precision | Recall | F1-Score | Support |
 |----------|-----------|--------|----------|---------|
@@ -1423,7 +1442,7 @@ A standalone RoBERTa-based model was experimentally trained and evaluated on the
 
 ---
 
-#### 📈 Overall Performance
+##### 📈 Overall Performance
 
 | Metric            | Score  |
 |-------------------|--------|
@@ -1433,7 +1452,7 @@ A standalone RoBERTa-based model was experimentally trained and evaluated on the
 
 ---
 
-#### 🖼️ Evaluation Visualizations
+##### 🖼️ Evaluation Visualizations
 
 <p align="center">
   <img src="assets/mcf.png" width="48%" />
@@ -1445,7 +1464,7 @@ A standalone RoBERTa-based model was experimentally trained and evaluated on the
 
 ---
 
-The model performs reliably on dominant classes such as neutral (F1 = 0.80) and joy (F1 = 0.60), but struggles with minority emotions — particularly fear (F1 = 0.09) and disgust (F1 = 0.26) — due to limited training samples and semantic overlap with related classes. The notable gap between accuracy (65.25%) and macro F1 (0.44) further reflects the dataset's class imbalance. These findings highlight the importance of multimodal fusion — combining textual, acoustic, and visual signals — for more robust and generalised emotion recognition.
+The model performs reliably on dominant classes such as **neutral** (F1 = 0.80) and **joy** (F1 = 0.60), but struggles with minority emotions — particularly **fear** (F1 = 0.09) and **disgust** (F1 = 0.26) — due to limited training samples and semantic overlap with related classes. The notable gap between accuracy (65.25%) and macro F1 (0.44) further reflects the dataset's class imbalance. These findings highlight the importance of multimodal fusion — combining textual, acoustic, and visual signals — for more robust and generalised emotion recognition.
 
 ---
 
@@ -2525,9 +2544,8 @@ IIIT_project/
 |
 ├── MELD_text_model/
 │   ├── MELD_dataset/
-│   │   ├── train.csv
-│   │   ├── dev.csv
-│   │   └── test.csv
+│   │   ├── MELD-Features-Models/
+│   │   └── MELD-RAW/
 │   │
 │   ├── train.py
 │   ├── test.py
@@ -2548,6 +2566,8 @@ IIIT_project/
 └── Report.pdf
 
 ```
+
+> **⚠️ Note:** The `MELD_text_model/` folder is an experimental extension and is entirely optional. It is only required if you specifically wish to train or evaluate the MELD Text Model. For full instructions, please see the [Standalone MELD Text Emotion Recognition Model](#meld-text-model).
 
 ---
 
@@ -2864,7 +2884,6 @@ Example testing demonstrations for all three architectures:
 
 ---
 
----
 ---
 
 <a id="meld-text-model"></a>
