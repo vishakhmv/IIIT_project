@@ -1,6 +1,7 @@
 # Block heavy datasets and compressed archives
 TESS_dataset/
 archive.zip
+MELD_text_model/MELD_dataset/
 
 # Block heavy binary model weights
 *.pth
