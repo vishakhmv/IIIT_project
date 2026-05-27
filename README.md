@@ -1466,6 +1466,8 @@ Unlike the TESS text model (which freezes DistilBERT and trains only the classif
 
 The model performs reliably on dominant classes such as **neutral** (F1 = 0.80) and **joy** (F1 = 0.60), but struggles with minority emotions — particularly **fear** (F1 = 0.09) and **disgust** (F1 = 0.26) — due to limited training samples and semantic overlap with related classes. The notable gap between accuracy (65.25%) and macro F1 (0.44) further reflects the dataset's class imbalance. These findings highlight the importance of multimodal fusion — combining textual, acoustic, and visual signals — for more robust and generalised emotion recognition.
 
+> ⚠️ **Note on Overfitting:** The MELD model exhibits mild overfitting — training loss decreases steadily across all 5 epochs (1.20 → 0.56), while validation accuracy plateaus at ~0.61 from epoch 1 onwards. This is expected behavior attributable to MELD's severe class imbalance (neutral: 1,256 samples vs. fear: 50 samples) and the semantic ambiguity between emotionally adjacent categories, rather than an architectural flaw. The 65.25% test accuracy still strongly validates that transformer-based semantic learning is capable of meaningful emotion discrimination on linguistically varied corpora.
+
 ---
 
 <a id="fusion-model"></a>
