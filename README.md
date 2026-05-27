@@ -3138,6 +3138,6 @@ The additional experimental extension using the **MELD conversational emotion da
 
 The Multimodal Fusion model, combining both modalities, achieved **99.29% accuracy** — and its significance lies not merely in the number, but in what it demonstrates architecturally. Even when one modality (text) is largely uninformative, fusing it with a strong modality (speech) produces a more stable and generalizable representation than either branch alone.
 
-Ultimately, **Bhavora AI** highlights how multimodal deep learning can bridge speech and language understanding to build emotion recognition systems that are not only highly accurate.
+Ultimately, **Bhavora AI** highlights how multimodal deep learning can bridge speech and language understanding to build emotion recognition systems that are highly accurate.
 
 ---
