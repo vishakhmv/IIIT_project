@@ -40,7 +40,8 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [🛠️ 6. Install Dependencies](#install-dependencies)
   - [🚀 7. Run Training](#training)
   - [🧪 8. Run Testing](#testing)
-  - [🌐 9. Run Web Application](#web-app)
+     - [💬 9. Standalone MELD Text Emotion Recognition Model](#meld-text-model)
+  - [🌐 10. Run Web Application](#web-app)
 
 ---
 
@@ -2473,6 +2474,22 @@ IIIT_project/
 │   ├── style.css
 │   ├── script.js
 │   └── requirements.txt
+|
+├── MELD_text_model/
+│   ├── MELD_dataset/
+│   │   ├── train.csv
+│   │   ├── dev.csv
+│   │   └── test.csv
+│   │
+│   ├── train.py
+│   ├── test.py
+│   ├── requirements.txt
+│   │
+│   ├── best_meld_text_model.pth
+│   ├── learning_curve.png
+│   ├── confusion_matrix.png
+│   ├── tsne_plot.png
+│   └── classification_report.txt
 │
 ├── best_speech_model.pth
 ├── best_text_model.pth
@@ -2520,6 +2537,16 @@ IIIT_project/
 | `TESS_dataset/`                             | Contains both compressed and extracted versions of the TESS emotional speech dataset.                               |
 | `↳ archive.zip`                             | Original compressed TESS dataset archive used during preprocessing.                                                 |
 | `↳ TESS Toronto emotional speech set data/` | Extracted dataset directory containing all emotional speech samples.                                                |
+| `MELD_text_model/`                  | Standalone RoBERTa-based text emotion recognition pipeline trained and evaluated on the MELD conversational emotion dataset. |
+| `↳ MELD_dataset/`                  | Contains MELD train, validation, and test CSV files used for conversational text emotion recognition. |
+| `↳ train.py`                       | Trains the standalone MELD text emotion recognition model using RoBERTa embeddings. |
+| `↳ test.py`                        | Evaluates the trained MELD model and generates classification reports, confusion matrices, and t-SNE visualizations. |
+| `↳ requirements.txt`               | Python dependencies required for running the standalone MELD text model pipeline. |
+| `↳ best_meld_text_model.pth`       | Trained MELD text emotion recognition model checkpoint. |
+| `↳ learning_curve.png`             | Training loss and validation accuracy visualization generated during MELD model training. |
+| `↳ confusion_matrix.png`           | Confusion matrix visualization for MELD text emotion predictions. |
+| `↳ tsne_plot.png`                  | t-SNE latent embedding visualization for MELD text representations. |
+| `↳ classification_report.txt`      | Precision, recall, F1-score, and accuracy metrics for the MELD text model. |
 | `best_speech_model.pth`                     | Pretrained Speech-Only model checkpoint.                                                                            |
 | `best_text_model.pth`                       | Pretrained Text-Only model checkpoint.                                                                              |
 | `best_fusion_model.pth`                     | Pretrained Multimodal Fusion model checkpoint.                                                                      |
@@ -2789,9 +2816,131 @@ Example testing demonstrations for all three architectures:
 
 ---
 
+---
+---
+
+<a id="meld-text-model"></a>
+
+### 💬 9. Standalone MELD Text Emotion Recognition Model
+
+In addition to the primary TESS-based Speech, Text, and Multimodal Fusion architectures, this repository also includes a standalone conversational text emotion recognition pipeline trained on the MELD dataset using a RoBERTa-based transformer architecture.
+
+The MELD module is fully self-contained inside:
+
+```bash
+IIIT_project/
+└── MELD_text_model/
+```
+
+---
+
+#### 📦 9.1 MELD Dataset Setup
+
+Download the official MELD dataset from:
+
+- https://affective-meld.github.io/
+
+After downloading, place the dataset CSV files inside:
+
+```bash
+IIIT_project/
+└── MELD_text_model/
+    └── MELD_dataset/
+```
+
+---
+Before running the continuing, make sure you are inside the root project directory in the terminal:
+
+#### 🚀 9.2 Train MELD Text Model *(Optional)*
+
+Run the training pipeline using:
+
+```bash
+python MELD_text_model/train.py
+```
+
+Training automatically generates:
+
+- pretrained model checkpoint
+- learning curve visualization
+
+Generated outputs:
+
+```bash
+IIIT_project/
+└── MELD_text_model/
+    ├── best_meld_text_model.pth
+    └── learning_curve.png
+```
+
+---
+
+#### 🧪 9.3 Test MELD Text Model
+
+#### 🧠 Pretrained MELD Model Checkpoint
+
+Download the pretrained MELD text model checkpoint from:
+
+- https://drive.google.com/file/d/1LsvYrzwkiDa_hhg0Xia1VC1zQBUBVlqU/view?usp=drive_link
+
+Place the checkpoint inside:
+
+```bash
+IIIT_project/
+└── MELD_text_model/
+    └── best_meld_text_model.pth
+```
+
+---
+
+#### 🛠️ Install MELD Dependencies
+
+Install all required Python libraries using:
+
+```bash
+pip install -r MELD_text_model/requirements.txt
+```
+
+---
+
+Run the evaluation pipeline using:
+
+```bash
+python -B MELD_text_model/test.py
+```
+
+Testing automatically generates:
+
+- classification report
+- confusion matrix
+- t-SNE embedding visualization
+
+Generated outputs:
+
+```bash
+IIIT_project/
+└── MELD_text_model/
+    ├── classification_report.txt
+    ├── confusion_matrix.png
+    └── tsne_plot.png
+```
+
+---
+
+#### 📊 9.4 Generated Evaluation Artifacts
+
+| Artifact                    | Description                                           |
+| --------------------------- | ----------------------------------------------------- |
+| `classification_report.txt` | Precision, Recall, F1-Score, and Accuracy metrics     |
+| `confusion_matrix.png`      | Emotion prediction confusion matrix visualization     |
+| `tsne_plot.png`             | Latent embedding clustering visualization using t-SNE |
+| `learning_curve.png`        | Training loss and validation accuracy visualization   |
+
+---
+
 <a id="web-app"></a>
 
-### 🌐 9. Run Web Application
+### 🌐 10. Run Web Application
 
 The project includes a fully functional and responsive web application named **Bhavora AI**, built using a Python (Flask) backend with an HTML/CSS/JavaScript frontend.
 
