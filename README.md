@@ -40,7 +40,7 @@ The project also includes **representation learning analysis, t-SNE visualizatio
   - [🛠️ 6. Install Dependencies](#install-dependencies)
   - [🚀 7. Run Training](#training)
   - [🧪 8. Run Testing](#testing)
-     - [💬 9. Standalone MELD Text Emotion Recognition Model](#meld-text-model)
+  - [💬 9. Standalone MELD Text Emotion Recognition Model](#meld-text-model)
   - [🌐 10. Run Web Application](#web-app)
 
 ---
@@ -1398,6 +1398,54 @@ The failure of semantic-only learning motivates the need for:
 - Multimodal feature fusion
 
 for effective emotional understanding.
+
+---
+
+### 💬 Experimental Extension — Standalone MELD Text Emotion Recognition
+
+A standalone RoBERTa-based model was experimentally trained and evaluated on the MELD conversational emotion dataset to investigate transformer-based emotion understanding in dialogue contexts. Unlike TESS, MELD provides multi-speaker conversational dialogue with richer contextual and emotional variations, allowing transformer architectures to leverage semantic representations more effectively.
+
+> ⚠️ Since TESS and MELD differ in domain, size, and class distribution, performance differences reflect dataset characteristics as much as architectural suitability and should not be directly compared.
+
+---
+
+#### 📊 MELD Classification Performance
+
+| Emotion  | Precision | Recall | F1-Score | Support |
+|----------|-----------|--------|----------|---------|
+| neutral  | 0.74      | 0.86   | 0.80     | 1256    |
+| surprise | 0.58      | 0.53   | 0.55     | 281     |
+| fear     | 0.21      | 0.06   | 0.09     | 50      |
+| sadness  | 0.46      | 0.25   | 0.33     | 208     |
+| joy      | 0.60      | 0.60   | 0.60     | 402     |
+| disgust  | 0.48      | 0.18   | 0.26     | 68      |
+| anger    | 0.48      | 0.47   | 0.48     | 345     |
+
+---
+
+#### 📈 Overall Performance
+
+| Metric            | Score  |
+|-------------------|--------|
+| Accuracy          | 65.25% |
+| Macro F1-Score    | 0.44   |
+| Weighted F1-Score | 0.63   |
+
+---
+
+#### 🖼️ Evaluation Visualizations
+
+<p align="center">
+  <img src="assets/mcf.png" width="48%" />
+  <img src="assets/mtsne.png" width="48%" />
+</p>
+<p align="center">
+  <em>Left: Confusion Matrix &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Right: t-SNE Embedding Visualization</em>
+</p>
+
+---
+
+The model performs reliably on dominant classes such as neutral (F1 = 0.80) and joy (F1 = 0.60), but struggles with minority emotions — particularly fear (F1 = 0.09) and disgust (F1 = 0.26) — due to limited training samples and semantic overlap with related classes. The notable gap between accuracy (65.25%) and macro F1 (0.44) further reflects the dataset's class imbalance. These findings highlight the importance of multimodal fusion — combining textual, acoustic, and visual signals — for more robust and generalised emotion recognition.
 
 ---
 
@@ -2849,7 +2897,7 @@ IIIT_project/
 ```
 
 ---
-Before running the continuing, make sure you are inside the root project directory in the terminal:
+Before continuing, make sure you are inside the root project directory in the terminal:
 
 #### 🚀 9.2 Train MELD Text Model *(Optional)*
 
@@ -2877,7 +2925,7 @@ IIIT_project/
 
 #### 🧪 9.3 Test MELD Text Model
 
-#### 🧠 Pretrained MELD Model Checkpoint
+##### 🧠 Pretrained MELD Model Checkpoint
 
 Download the pretrained MELD text model checkpoint from:
 
@@ -2893,7 +2941,7 @@ IIIT_project/
 
 ---
 
-#### 🛠️ Install MELD Dependencies
+##### 🛠️ Install MELD Dependencies
 
 Install all required Python libraries using:
 
@@ -2902,6 +2950,8 @@ pip install -r MELD_text_model/requirements.txt
 ```
 
 ---
+
+##### 🧪 Rinning test.py
 
 Run the evaluation pipeline using:
 
