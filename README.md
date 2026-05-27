@@ -2370,7 +2370,6 @@ This project demonstrates that acoustic speech information plays a dominant role
 The experimental results further show that multimodal learning can effectively integrate speech and language representations to build highly accurate and robust emotion recognition systems.
 
 ---
----
 
 <a id="limitations"></a>
 ## ⚠️ System Limitations & Constraints
