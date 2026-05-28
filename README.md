@@ -50,11 +50,13 @@ The project also includes **representation learning analysis, t-SNE visualizatio
 
 ## 🧠 Model Overview
 
-| Model             | Input Modality | Main Backbone                       |
-| ----------------- | -------------- | ----------------------------------- |
-| Speech-Only       | Audio          | HuBERT + MFCC + BiLSTM              |
-| Text-Only         | Text           | DistilBERT                          |
-| Multimodal Fusion | Audio + Text   | HuBERT + MFCC + BiLSTM + DistilBERT |
+| Model             | Input Modality | Main Backbone                       | Overall Test Accuracy |
+| ----------------- | -------------- | ----------------------------------- | --------------------- |
+| Speech-Only       | Audio          | HuBERT + MFCC + BiLSTM              | **99.64%** |
+| Text-Only         | Text           | DistilBERT                          | **14.29%** |
+| Multimodal Fusion | Audio + Text   | HuBERT + MFCC + BiLSTM + DistilBERT | **99.29%** |
+
+---
 
 <a id="dataset"></a>
 
